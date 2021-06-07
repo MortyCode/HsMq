@@ -1,6 +1,5 @@
 package com.hsmq.consumer;
 
-import com.hsmq.client.client.BaseConsumer;
 import com.hsmq.protocol.HsBaseData;
 import io.netty.channel.ChannelFuture;
 

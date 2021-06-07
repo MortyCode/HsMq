@@ -15,6 +15,7 @@
         <module>client</module>
         <module>protocol</module>
         <module>storage</module>
+        <module>server</module>
     </modules>
 
 

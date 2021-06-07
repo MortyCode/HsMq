@@ -1,14 +1,10 @@
 package com.hsmq.client;
 
-import com.hsmq.client.client.BaseConsumer;
 import com.hsmq.client.client.ObjectClient;
 import com.hsmq.data.Message;
-import com.hsmq.protocol.HsBaseData;
 import io.netty.channel.ChannelFuture;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author ：河神

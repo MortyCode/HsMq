@@ -1,6 +1,5 @@
 package com.hsmq.server;
 
-import com.hsmq.server.server.BaseServer;
 import com.hsmq.server.server.ObjectServer;
 
 /**
