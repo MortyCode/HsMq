@@ -2,6 +2,7 @@ package com.hsmq.client.client;
 
 
 import com.hsmq.client.handle.ObjectInHandel;
+import com.hsmq.client.handle.ObjectSimHandel;
 import com.hsmq.data.Message;
 import com.hsmq.decode.ObjectDecode;
 import com.hsmq.encode.ObjectEncode;
@@ -42,7 +43,7 @@ public class ObjectClient {
                 ChannelPipeline pipeline = socketChannel.pipeline();
                 pipeline.addLast(new ObjectEncode());
                 pipeline.addLast(new ObjectDecode<Message>());
-                pipeline.addLast(new ObjectInHandel());
+                pipeline.addLast(new ObjectSimHandel());
             }
         });
 

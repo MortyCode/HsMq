@@ -3,6 +3,7 @@ package com.hsmq.client;
 import com.hsmq.client.client.ObjectClient;
 import com.hsmq.data.Message;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 
 import java.util.UUID;
 
@@ -27,7 +28,12 @@ public class ClientObjectStartup {
             message.setMsgId(UUID.randomUUID().toString());
 
 
-            channelFuture.channel().writeAndFlush(message).sync();
+            channelFuture.channel().writeAndFlush(message).addListener(new ChannelFutureListener(){
+                @Override
+                public void operationComplete(ChannelFuture future) throws Exception {
+                    System.out.println("发送成功");
+                }
+            });
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
