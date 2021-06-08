@@ -11,6 +11,7 @@
         <module>consumer</module>
         <module>producer</module>
         <module>io</module>
+        <module>mqserver</module>
     </modules>
     <packaging>pom</packaging>
 

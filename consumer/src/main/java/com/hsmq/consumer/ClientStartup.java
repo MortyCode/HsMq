@@ -1,5 +1,8 @@
 package com.hsmq.consumer;
 
+import com.hsmq.consumer.reactor.ConsumerClient;
+import com.hsmq.data.Message;
+import com.hsmq.enums.MessageEnum;
 import com.hsmq.protocol.HsBaseData;
 import io.netty.channel.ChannelFuture;
 
@@ -14,22 +17,24 @@ public class ClientStartup {
 
 
     public static void main(String[] args) throws InterruptedException {
-        BaseConsumer baseConsumer = new BaseConsumer("127.0.0.1", 9001);
+        ConsumerClient baseConsumer = new ConsumerClient("127.0.0.1", 9001);
         baseConsumer.start();
 
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        String topic = args[0];
 
 
-        executorService.execute(()->{
-            ChannelFuture channelFuture = null;
+        ChannelFuture channelFuture = baseConsumer.getChannelFuture();
+        Message message = new Message();
+        for (;;){
             try {
-                channelFuture = baseConsumer.getChannelFuture();
-                HsBaseData hsBaseData = new HsBaseData("你好啊END");
-                channelFuture.channel().writeAndFlush(hsBaseData).sync();
+                message.setType(MessageEnum.Pull.getCode());
+                message.setTopic(topic);
+                channelFuture.channel().writeAndFlush(message).sync();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
+        }
 
     }
 

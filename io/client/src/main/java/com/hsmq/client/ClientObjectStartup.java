@@ -18,25 +18,21 @@ public class ClientObjectStartup {
         ObjectClient baseConsumer = new ObjectClient("127.0.0.1", 9001);
         baseConsumer.start();
         ChannelFuture channelFuture = null;
-        try {
-            channelFuture = baseConsumer.getChannelFuture();
 
-            Message message = new Message();
-            message.setTopic("TopicA");
-            message.setTag("TagA");
-            message.setBody("撒撒打算打算打算打算打算打算的撒打算打算的");
-            message.setMsgId(UUID.randomUUID().toString());
+        channelFuture = baseConsumer.getChannelFuture();
 
+        Message message = new Message();
+        message.setTopic("TopicA");
+        message.setTag("TagA");
+        message.setBody("撒撒打算打算打算打算打算打算的撒打算打算的");
+        message.setMsgId(UUID.randomUUID().toString());
 
-            channelFuture.channel().writeAndFlush(message).addListener(new ChannelFutureListener(){
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    System.out.println("发送成功");
-                }
-            });
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        channelFuture.channel().writeAndFlush(message).addListener(new ChannelFutureListener(){
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                System.out.println("发送成功");
+            }
+        });
 
     }
 

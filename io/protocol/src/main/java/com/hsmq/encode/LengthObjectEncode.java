@@ -10,16 +10,14 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @author ：河神
  * @date ：Created in 2021/6/6 6:38 下午
  */
-public class ObjectEncode extends MessageToByteEncoder<Message> {
+public class LengthObjectEncode extends MessageToByteEncoder<Message> {
 
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Message msg, ByteBuf out) throws Exception {
 
         HsMessage<Message> hsMessage = new HsMessage<>(msg);
-
-        out.writeInt(hsMessage.getLength());
+        out.writeInt(hsMessage.getLength()+4);
         out.writeBytes(hsMessage.getDataArray());
-//        System.out.println("编码完成");
     }
 }

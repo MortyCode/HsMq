@@ -1,5 +1,8 @@
 package com.hsmq.data;
 
+import com.hsmq.enums.MessageEnum;
+import com.hsmq.enums.ResultEnum;
+
 import java.io.Serializable;
 import java.util.StringJoiner;
 
@@ -13,6 +16,14 @@ public class Message implements Serializable {
     private String topic;
     private String tag;
     private String body;
+    /**
+     * @see MessageEnum
+     */
+    private String type;
+    /**
+     * @see ResultEnum
+     */
+    private String result;
 
 
     public String getMsgId() {
@@ -47,6 +58,22 @@ public class Message implements Serializable {
         this.body = body;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", Message.class.getSimpleName() + "[", "]")
@@ -54,6 +81,8 @@ public class Message implements Serializable {
                 .add("topic='" + topic + "'")
                 .add("tag='" + tag + "'")
                 .add("body='" + body + "'")
+                .add("type='" + type + "'")
+                .add("result='" + result + "'")
                 .toString();
     }
 }

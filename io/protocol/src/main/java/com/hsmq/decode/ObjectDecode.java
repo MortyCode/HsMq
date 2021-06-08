@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,15 +24,21 @@ public class ObjectDecode<T> extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf byteBuf, List<Object> out) throws Exception {
 
-        while (byteBuf.isReadable()) {
+        while (byteBuf.isReadable()&&byteBuf.readableBytes()>0) {
             if (hsMessage.getLength() == null) {
-                int head = byteBuf.readInt();
-                hsMessage.setLength(head);
+                if (byteBuf.readableBytes()>=4){
+                    int head = byteBuf.readInt();
+                    hsMessage.setLength(head);
+                }else {
+                    break;
+                }
             } else {
-
                 Integer length = hsMessage.getLength();
                 if (hsMessage.getDataArray() != null) {
                     length = hsMessage.getLength() - hsMessage.getDataArray().length;
+                }
+                if (length>byteBuf.readableBytes()){
+                    length = byteBuf.readableBytes();
                 }
                 byte[] b2 = new byte[length];
                 byteBuf.readBytes(b2);
