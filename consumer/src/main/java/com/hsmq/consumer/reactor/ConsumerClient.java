@@ -6,6 +6,7 @@ import com.hsmq.consumer.handle.ConsumerHandel;
 import com.hsmq.data.Message;
 import com.hsmq.decode.LengthObjectDecode;
 import com.hsmq.decode.ObjectDecode;
+import com.hsmq.encode.LengthObjectEncode;
 import com.hsmq.encode.ObjectEncode;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -45,8 +46,8 @@ public class ConsumerClient {
             @Override
             protected void initChannel(NioSocketChannel socketChannel) throws Exception {
                 ChannelPipeline pipeline = socketChannel.pipeline();
-                pipeline.addLast(new ObjectEncode());
-                pipeline.addLast(new LengthObjectDecode<Message>());
+                pipeline.addLast(new LengthObjectEncode());
+                pipeline.addLast(new LengthObjectDecode());
                 pipeline.addLast(new ConsumerHandel());
             }
         });

@@ -9,14 +9,26 @@ public enum ResultEnum {
     /**
      * 发送成功
      */
-    SendOK("SendOK");
+    SendOK(200,"SendOK"),
+    ParameterWrongType(1000,"Wrong Parameter type"),
 
-    private String code;
 
-    ResultEnum(String code) {
+
+    ;
+
+    private Integer code;
+    private String dec;
+
+    ResultEnum(Integer code, String dec) {
         this.code = code;
+        this.dec = dec;
     }
-    public String getCode() {
+
+    public Integer getCode() {
         return code;
+    }
+
+    public String getDec() {
+        return dec;
     }
 }

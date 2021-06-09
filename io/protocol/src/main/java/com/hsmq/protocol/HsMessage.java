@@ -26,7 +26,6 @@ public class HsMessage<T> {
         message.setTopic("TopicA");
         message.setTag("TagA");
         message.setBody("撒撒打算打算打算打算打算打算的撒打算打算的");
-        message.setMsgId(UUID.randomUUID().toString());
 
         HsMessage<Message> hsMessage2 = new HsMessage<>(message);
 

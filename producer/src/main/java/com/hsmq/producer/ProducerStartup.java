@@ -1,8 +1,13 @@
 package com.hsmq.producer;
 
+import com.hsmq.data.Head;
+import com.hsmq.data.HsReq;
 import com.hsmq.data.Message;
+import com.hsmq.data.Pull;
 import com.hsmq.enums.MessageEnum;
+import com.hsmq.enums.OperationEnum;
 import com.hsmq.producer.reactor.ProducerClient;
+import com.hsmq.protocol.HsEecodeData;
 import io.netty.channel.ChannelFuture;
 
 import java.util.UUID;
@@ -20,10 +25,16 @@ public class ProducerStartup {
 
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
 
-        Message message = new Message();
-        message.setType(MessageEnum.Message.getCode());
-        for (int i=1;;i++){
 
+        HsEecodeData hsEecodeData = new HsEecodeData();
+        hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
+
+        HsReq<Message> hsReq = new HsReq<>();
+        Message message = new Message();
+
+        hsReq.setOperation(OperationEnum.Message.getOperation());
+
+        for (int i=1;;i++){
             if (i%2==0){
                 message.setTopic("TopicA");
                 message.setTag("tagA");
@@ -31,11 +42,12 @@ public class ProducerStartup {
                 message.setTopic("TopicB");
                 message.setTag("tagB");
             }
+            message.setBody("消息---"+i);
+            hsReq.setData(message);
+            hsEecodeData.setData(hsReq);
 
             Thread.sleep(1000L);
-            message.setBody("消息---"+i);
-            message.setMsgId(UUID.randomUUID().toString());
-            channelFuture.channel().writeAndFlush(message);
+            channelFuture.channel().writeAndFlush(hsEecodeData).sync();
         }
     }
 

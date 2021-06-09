@@ -3,6 +3,7 @@ package com.hsms.mqserver.data;
 import com.hsmq.data.Message;
 import com.hsmq.enums.ResultEnum;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -37,7 +38,7 @@ public class MessageStore {
         return queue.poll();
     }
 
-    public void save(Message message){
+    public String save(Message message){
         ConcurrentLinkedQueue<Message> queue = data.get(message.getTopic());
         if (queue==null){
             synchronized (this){
@@ -48,7 +49,10 @@ public class MessageStore {
                 }
             }
         }
+        String msgId = UUID.randomUUID().toString();
+        message.setMsgId(msgId);
         queue.add(message);
+        return msgId;
     }
 
 }

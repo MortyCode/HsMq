@@ -5,6 +5,7 @@ import com.hsmq.client.handle.ObjectSimHandel;
 import com.hsmq.data.Message;
 import com.hsmq.decode.LengthObjectDecode;
 import com.hsmq.decode.ObjectDecode;
+import com.hsmq.encode.LengthObjectEncode;
 import com.hsmq.encode.ObjectEncode;
 import com.hsmq.producer.handle.ProducerHandel;
 import io.netty.bootstrap.Bootstrap;
@@ -42,8 +43,8 @@ public class ProducerClient {
             @Override
             protected void initChannel(NioSocketChannel socketChannel) throws Exception {
                 ChannelPipeline pipeline = socketChannel.pipeline();
-                pipeline.addLast(new ObjectEncode());
-                pipeline.addLast(new LengthObjectDecode<Message>());
+                pipeline.addLast(new LengthObjectEncode());
+                pipeline.addLast(new LengthObjectDecode());
                 pipeline.addLast(new ProducerHandel());
             }
         });

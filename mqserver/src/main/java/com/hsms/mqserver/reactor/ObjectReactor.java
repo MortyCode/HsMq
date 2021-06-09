@@ -3,6 +3,7 @@ package com.hsms.mqserver.reactor;
 import com.hsmq.data.Message;
 import com.hsmq.decode.LengthObjectDecode;
 import com.hsmq.decode.ObjectDecode;
+import com.hsmq.encode.LengthObjectEncode;
 import com.hsmq.encode.ObjectEncode;
 import com.hsms.mqserver.handle.ServerInHandel;
 import io.netty.bootstrap.ServerBootstrap;
@@ -39,8 +40,8 @@ public class ObjectReactor {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
                 ChannelPipeline pipeline = socketChannel.pipeline();
-                pipeline.addLast(new ObjectEncode());
-                pipeline.addLast(new LengthObjectDecode<Message>());
+                pipeline.addLast(new LengthObjectDecode());
+                pipeline.addLast(new LengthObjectEncode());
                 pipeline.addLast(new ServerInHandel());
             }
         });

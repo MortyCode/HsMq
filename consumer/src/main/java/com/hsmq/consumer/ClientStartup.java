@@ -1,9 +1,14 @@
 package com.hsmq.consumer;
 
 import com.hsmq.consumer.reactor.ConsumerClient;
+import com.hsmq.data.Head;
+import com.hsmq.data.HsReq;
 import com.hsmq.data.Message;
+import com.hsmq.data.Pull;
 import com.hsmq.enums.MessageEnum;
+import com.hsmq.enums.OperationEnum;
 import com.hsmq.protocol.HsBaseData;
+import com.hsmq.protocol.HsEecodeData;
 import io.netty.channel.ChannelFuture;
 
 import java.util.concurrent.ExecutorService;
@@ -24,13 +29,20 @@ public class ClientStartup {
 
 
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
-        Message message = new Message();
+
+        HsEecodeData hsEecodeData = new HsEecodeData();
+        hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
+        HsReq<Pull> hsReq = new HsReq<>();
+        Pull pull = new Pull();
+        pull.setTopic(topic);
+        hsReq.setData(pull);
+        hsReq.setOperation(OperationEnum.Pull.getOperation());
+        hsEecodeData.setData(hsReq);
+
         for (;;){
             try {
-                message.setType(MessageEnum.Pull.getCode());
-                message.setTopic(topic);
-                channelFuture.channel().writeAndFlush(message).sync();
-
+                Thread.sleep(100L);
+                channelFuture.channel().writeAndFlush(hsEecodeData).sync();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
