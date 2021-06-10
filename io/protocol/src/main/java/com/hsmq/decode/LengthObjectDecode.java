@@ -41,6 +41,7 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
             ByteBuffer byteBuffer = frame.nioBuffer();
 
             int limit = byteBuffer.limit();
+            byte[] limits = new byte[limit];
 
             int headLength = byteBuffer.getInt();
             byte[] headData = new byte[headLength];

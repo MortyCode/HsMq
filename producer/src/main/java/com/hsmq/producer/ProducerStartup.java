@@ -26,15 +26,16 @@ public class ProducerStartup {
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
 
 
-        HsEecodeData hsEecodeData = new HsEecodeData();
-        hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
 
-        HsReq<Message> hsReq = new HsReq<>();
-        Message message = new Message();
-
-        hsReq.setOperation(OperationEnum.Message.getOperation());
 
         for (int i=1;;i++){
+            HsEecodeData hsEecodeData = new HsEecodeData();
+            hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
+
+            HsReq<Message> hsReq = new HsReq<>();
+            Message message = new Message();
+
+            hsReq.setOperation(OperationEnum.Message.getOperation());
             if (i%2==0){
                 message.setTopic("TopicA");
                 message.setTag("tagA");
