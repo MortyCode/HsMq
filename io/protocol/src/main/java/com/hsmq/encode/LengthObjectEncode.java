@@ -4,8 +4,11 @@ import com.hsmq.data.Message;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsmq.protocol.HsMessage;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+
+import java.nio.ByteBuffer;
 
 /**
  * @author ：河神

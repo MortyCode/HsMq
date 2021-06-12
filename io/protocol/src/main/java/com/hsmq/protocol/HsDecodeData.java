@@ -2,11 +2,7 @@ package com.hsmq.protocol;
 
 import com.hsmq.data.Head;
 import com.hsmq.data.HsReq;
-import com.hsmq.data.HsResp;
 import com.hsmq.enums.MessageEnum;
-import com.hsmq.utils.ObjectAndByte;
-
-import java.io.Serializable;
 
 /**
  * @author ：河神

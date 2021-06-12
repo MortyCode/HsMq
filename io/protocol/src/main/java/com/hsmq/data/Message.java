@@ -1,12 +1,16 @@
 package com.hsmq.data;
 
 import java.io.Serializable;
+import java.util.StringJoiner;
 
 /**
  * @author ：河神
  * @date ：Created in 2021/6/7 3:05 下午
  */
 public class Message implements Serializable {
+
+    private static final long serialVersionUID = -20210610L;
+
 
     private String msgId;
     private String topic;
@@ -52,5 +56,16 @@ public class Message implements Serializable {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Message.class.getSimpleName() + "[", "]")
+                .add("msgId='" + msgId + "'")
+                .add("topic='" + topic + "'")
+                .add("tag='" + tag + "'")
+                .add("key='" + key + "'")
+                .add("body='" + body + "'")
+                .toString();
     }
 }

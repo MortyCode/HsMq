@@ -12,11 +12,17 @@
     <artifactId>mqserver</artifactId>
 
     <dependencies>
+
         <dependency>
-            <artifactId>client</artifactId>
             <groupId>com.heshen</groupId>
-            <scope>compile</scope>
+            <artifactId>protocol</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.heshen</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

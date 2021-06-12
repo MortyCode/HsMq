@@ -9,20 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>producer</artifactId>
+    <artifactId>common</artifactId>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>com.heshen</groupId>
-            <artifactId>protocol</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.heshen</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-
-    </dependencies>
 
 </project>

@@ -10,6 +10,9 @@ import java.io.Serializable;
  */
 public class HsResp<T> implements Serializable {
 
+    private static final long serialVersionUID = -20210610L;
+
+
     private Integer result;
 
     private String operation;

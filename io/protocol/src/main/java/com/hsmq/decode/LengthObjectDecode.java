@@ -3,15 +3,12 @@ package com.hsmq.decode;
 import com.hsmq.data.Head;
 import com.hsmq.enums.MessageEnum;
 import com.hsmq.protocol.HsDecodeData;
-import com.hsmq.protocol.HsMessage;
-import com.hsmq.utils.ObjectAndByte;
+import com.hsmq.utils.ObjectByteUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 import java.nio.ByteBuffer;
-import java.util.List;
 
 /**
  * @author: 河神
@@ -41,8 +38,6 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
             ByteBuffer byteBuffer = frame.nioBuffer();
 
             int limit = byteBuffer.limit();
-            byte[] limits = new byte[limit];
-
             int headLength = byteBuffer.getInt();
             byte[] headData = new byte[headLength];
             byteBuffer.get(headData);
@@ -63,7 +58,7 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
 
             HsDecodeData decodeData = new HsDecodeData();
             decodeData.setHead(head);
-            decodeData.setData(ObjectAndByte.toObject(dataData));
+            decodeData.setData(ObjectByteUtils.toObject(dataData));
             decodeData.setMsgTypeEnum(msgTypeEnum);
 
             return decodeData;

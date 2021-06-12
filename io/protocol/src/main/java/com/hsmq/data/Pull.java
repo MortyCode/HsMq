@@ -8,6 +8,10 @@ import java.io.Serializable;
  */
 public class Pull implements Serializable {
 
+    private static final long serialVersionUID = -20210610L;
+
+    private String consumer;
+
     private String topic;
     private String tag;
 

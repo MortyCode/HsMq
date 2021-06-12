@@ -3,7 +3,7 @@ package com.hsmq.protocol;
 import com.hsmq.data.Head;
 import com.hsmq.data.HsResp;
 import com.hsmq.enums.MessageEnum;
-import com.hsmq.utils.ObjectAndByte;
+import com.hsmq.utils.ObjectByteUtils;
 
 import java.io.Serializable;
 
@@ -21,7 +21,7 @@ public class HsEecodeData {
     }
 
     public void setHead(Head head) {
-        this.head = ObjectAndByte.toByteArray(head);
+        this.head = ObjectByteUtils.toByteArray(head);
     }
 
     public byte[] getData() {
@@ -29,7 +29,7 @@ public class HsEecodeData {
     }
 
     public void setData(Serializable data) {
-        this.data = ObjectAndByte.toByteArray(data);
+        this.data = ObjectByteUtils.toByteArray(data);
     }
 
     public int getHeadLength(){
@@ -41,7 +41,7 @@ public class HsEecodeData {
     }
 
     public int getLength(){
-        return 4 * 3 + getDataLength() + getHeadLength();
+        return 4 * 2 + getDataLength() + getHeadLength();
     }
 
 

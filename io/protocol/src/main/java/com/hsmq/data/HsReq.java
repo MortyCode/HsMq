@@ -11,6 +11,9 @@ import java.util.StringJoiner;
  */
 public class HsReq<T> implements Serializable {
 
+    private static final long serialVersionUID = -20210610L;
+
+
     /**
      * @see OperationEnum
      */

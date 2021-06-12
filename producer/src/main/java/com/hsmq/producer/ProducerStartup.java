@@ -47,7 +47,7 @@ public class ProducerStartup {
             hsReq.setData(message);
             hsEecodeData.setData(hsReq);
 
-            Thread.sleep(1000L);
+            Thread.sleep(1L);
             channelFuture.channel().writeAndFlush(hsEecodeData).sync();
         }
     }

@@ -1,4 +1,4 @@
-package com.hsmq.server.handle;
+package com.hsmq.producer.handle;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
@@ -66,6 +66,7 @@ public class ObjectOutHandle extends ChannelOutboundHandlerAdapter {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+
         super.write(ctx,msg, promise);
     }
 

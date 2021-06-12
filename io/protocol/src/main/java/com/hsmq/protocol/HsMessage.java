@@ -1,10 +1,9 @@
 package com.hsmq.protocol;
 
 import com.hsmq.data.Message;
-import com.hsmq.utils.ObjectAndByte;
+import com.hsmq.utils.ObjectByteUtils;
 
 import java.lang.reflect.Array;
-import java.util.UUID;
 
 /**
  * @author ：河神
@@ -87,12 +86,12 @@ public class HsMessage<T> {
         if (dataArray==null){
             return null;
         }
-       return  (T)ObjectAndByte.toObject(dataArray);
+       return  (T) ObjectByteUtils.toObject(dataArray);
     }
 
     public void setData(T data) {
         this.data = data;
-        byte[] bytes = ObjectAndByte.toByteArray(data);
+        byte[] bytes = ObjectByteUtils.toByteArray(data);
         this.dataArray = bytes;
         this.length = bytes.length;
     }

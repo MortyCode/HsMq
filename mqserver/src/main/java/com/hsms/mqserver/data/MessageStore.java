@@ -16,19 +16,6 @@ public class MessageStore {
 
     private static ConcurrentHashMap<String,ConcurrentLinkedQueue<Message>> data = new ConcurrentHashMap<>();
 
-    public Message pull(Message message){
-
-        Message data = pullMessage(message.getTopic());
-
-        if (data==null){
-            return message;
-        }
-        message.setBody(data.getBody());
-        message.setTag(data.getTag());
-        message.setTopic(data.getTopic());
-        message.setMsgId(data.getMsgId());
-        return message;
-    }
 
     public Message pullMessage(String topic){
         ConcurrentLinkedQueue<Message> queue;

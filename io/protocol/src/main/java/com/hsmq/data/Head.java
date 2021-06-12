@@ -1,7 +1,7 @@
 package com.hsmq.data;
 
 import com.hsmq.enums.MessageEnum;
-import com.hsmq.utils.ObjectAndByte;
+import com.hsmq.utils.ObjectByteUtils;
 
 import java.io.Serializable;
 
@@ -10,6 +10,10 @@ import java.io.Serializable;
  * @date ：Created in 2021/6/8 8:26 下午
  */
 public class Head  implements Serializable {
+
+    private static final long serialVersionUID = -20210610L;
+
+
     /**
      * @see MessageEnum
      * 消息类型：Req 和 Resp
@@ -31,7 +35,7 @@ public class Head  implements Serializable {
 
 
     public static Head toHead(byte[] headData){
-        return (Head)ObjectAndByte.toObject(headData);
+        return (Head) ObjectByteUtils.toObject(headData);
     }
 
     public static Head toHead(MessageEnum messageEnum){

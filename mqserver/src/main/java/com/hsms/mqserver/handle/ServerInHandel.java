@@ -27,7 +27,10 @@ public class ServerInHandel extends SimpleChannelInboundHandler<HsDecodeData> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData decodeData) throws Exception {
-        System.out.println("channelRead0"+decodeData);
+        if (decodeData==null){
+            System.out.println("decodeData is null"+decodeData);
+            return;
+        }
         HsEecodeData executor = MessageStrategy.executor(decodeData);
         ctx.channel().writeAndFlush(executor).sync();
     }

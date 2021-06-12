@@ -41,7 +41,7 @@ public class ClientStartup {
 
         for (;;){
             try {
-                Thread.sleep(100L);
+                Thread.sleep(1L);
                 channelFuture.channel().writeAndFlush(hsEecodeData).sync();
             } catch (InterruptedException e) {
                 e.printStackTrace();
