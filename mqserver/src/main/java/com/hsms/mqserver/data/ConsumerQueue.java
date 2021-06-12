@@ -14,9 +14,9 @@ public class ConsumerQueue {
 
     private String topic;
     private String tag;
-    private MessageStorage messageStorage;
+    private MessageStorage messageStorage = new MessageStorage();
 
-    private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue;
+    private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue = new ConcurrentLinkedQueue<>();
 
     public Message pullMessage(){
         MessageDurability messageDurability = messageMappingQueue.poll();
@@ -27,9 +27,10 @@ public class ConsumerQueue {
     }
 
     public void addMessage(MessageDurability messageDurability){
-        if (isAdd(messageDurability)){
-            messageMappingQueue.add(messageDurability);
-        }
+//        if (isAdd(messageDurability)){
+//        }
+
+        messageMappingQueue.add(messageDurability);
 
     }
 

@@ -35,6 +35,7 @@ public class ClientStartup {
         HsReq<Pull> hsReq = new HsReq<>();
         Pull pull = new Pull();
         pull.setTopic(topic);
+        pull.setConsumerName("AConsumer");
         hsReq.setData(pull);
         hsReq.setOperation(OperationEnum.Pull.getOperation());
         hsEecodeData.setData(hsReq);

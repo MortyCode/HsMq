@@ -44,6 +44,7 @@ public class ConsumerQueueManger {
                 consumerQueueMap = data.get(message.getTopic());
                 if (consumerQueueMap==null){
                     consumerQueueMap = new ConcurrentHashMap<>();
+                    data.put(message.getTopic(),consumerQueueMap);
                 }
             }
         }
