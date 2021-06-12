@@ -18,9 +18,6 @@ public class ConsumerQueue {
 
     private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue;
 
-
-
-
     public Message pullMessage(){
         MessageDurability messageDurability = messageMappingQueue.poll();
         if (messageDurability==null){

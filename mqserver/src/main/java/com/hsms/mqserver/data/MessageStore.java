@@ -24,56 +24,29 @@ public class MessageStore {
     private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
 //    private static ConcurrentHashMap<String,ConcurrentLinkedQueue<Message>> data = new ConcurrentHashMap<>();
 
+    private static ConsumerQueueManger consumerQueueManger;
 
-    private static ConcurrentMap<String,ConcurrentMap<String,ConsumerQueue>> data =
-            new ConcurrentHashMap<>();
+    static {
+        consumerQueueManger = new ConsumerQueueManger();
+    }
+
 
 
     private MessageStorage messageStorage = new MessageStorage();
 
     public Message pullMessage(Pull pull){
-        ConcurrentMap<String,ConsumerQueue> queue;
-        if ((queue=data.get(pull.getTopic()))==null){
-            queue = new ConcurrentHashMap<>();
-            data.put(pull.getTopic(),queue);
+        ConsumerQueue consumerQueue = consumerQueueManger.getAndRegister(pull);
+        if (consumerQueue==null){
             return null;
         }
-
-        ConsumerQueue consumerQueue;
-        if ((consumerQueue=queue.get(pull.getConsumerName()))==null){
-            consumerQueue = new ConsumerQueue();
-            queue.put(pull.getConsumerName(),consumerQueue);
-            return null;
-        }
-
         return consumerQueue.pullMessage();
     }
 
-    public String save(Message message){
-
-        String msgId = UUID.randomUUID().toString();
-        message.setMsgId(msgId);
-
+    public void saveMessage(Message message){
         MessageDurability messageDurability = messageStorage.saveMessage(message);
         messageDurability.setTags(message.getTag());
         logger.info("messageDurability:{}",messageDurability);
-
-
-        ConcurrentMap<String, ConsumerQueue> consumerQueueMap = data.get(message.getTopic());
-        if (consumerQueueMap==null){
-            synchronized (this){
-                consumerQueueMap = data.get(message.getTopic());
-                if (consumerQueueMap==null){
-                    consumerQueueMap = new ConcurrentHashMap<>();
-                }
-            }
-        }
-
-        for (Map.Entry<String, ConsumerQueue> entry : consumerQueueMap.entrySet()) {
-            entry.getValue().addMessage(messageDurability);
-        }
-
-        return msgId;
+        consumerQueueManger.pushConsumerQueue(message,messageDurability);
     }
 
 }

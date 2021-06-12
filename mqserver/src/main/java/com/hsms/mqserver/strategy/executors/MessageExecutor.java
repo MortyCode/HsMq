@@ -7,6 +7,7 @@ import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
 
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * @author ：河神
@@ -18,15 +19,19 @@ public class MessageExecutor extends BaseExecutor<Message,String>{
     @Override
     public HsResp<String> executor(HsReq<Message> hsReq) {
         Message message = hsReq.getData();
-        String msgId = messageStore.save(message);
+        message.setMsgId(msgId(message));
+        messageStore.saveMessage(message);
 
         HsResp<String> resp = new HsResp<>();
-        resp.setData(msgId);
+        resp.setData(message.getMsgId());
         resp.setOperation(OperationEnum.Resp.getOperation());
         resp.setResult(ResultEnum.SendOK.getCode());
         return resp;
     }
 
+    private String msgId(Message message){
+        return message.getTopic().hashCode()+UUID.randomUUID().toString();
+    }
 
 
     @Override
