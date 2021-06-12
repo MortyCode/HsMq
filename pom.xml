@@ -35,6 +35,13 @@
                 <version>${project.version}</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>com.heshen</groupId>
+                <artifactId>storage</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
             <dependency>
                 <groupId>io.netty</groupId>
