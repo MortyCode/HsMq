@@ -3,14 +3,11 @@ package com.hsmq.producer;
 import com.hsmq.data.Head;
 import com.hsmq.data.HsReq;
 import com.hsmq.data.Message;
-import com.hsmq.data.Pull;
 import com.hsmq.enums.MessageEnum;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.producer.reactor.ProducerClient;
 import com.hsmq.protocol.HsEecodeData;
 import io.netty.channel.ChannelFuture;
-
-import java.util.UUID;
 
 /**
  * @author ：河神
@@ -47,7 +44,7 @@ public class ProducerStartup {
             hsReq.setData(message);
             hsEecodeData.setData(hsReq);
 
-            Thread.sleep(1L);
+            Thread.sleep(1000L);
             channelFuture.channel().writeAndFlush(hsEecodeData).sync();
         }
     }

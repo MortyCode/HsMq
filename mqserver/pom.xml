@@ -23,6 +23,11 @@
             <artifactId>common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.heshen</groupId>
+            <artifactId>storage</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

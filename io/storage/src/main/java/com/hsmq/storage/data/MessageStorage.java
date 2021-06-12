@@ -1,6 +1,14 @@
 package com.hsmq.storage.data;
 
 import com.hsmq.data.Message;
+import com.hsmq.storage.config.StorageConfig;
+import com.hsmq.storage.durability.MessageDurability;
+import com.hsmq.storage.file.FileOperation;
+import com.hsmq.utils.ObjectByteUtils;
+import io.netty.util.internal.logging.InternalLogger;
+import io.netty.util.internal.logging.InternalLoggerFactory;
+
+import java.io.IOException;
 
 /**
  * @author ：河神
@@ -8,13 +16,31 @@ import com.hsmq.data.Message;
  */
 public class MessageStorage {
 
+    private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
 
-    public MessageStorage saveMessage(Message message){
+    public MessageDurability saveMessage(Message message){
+        try {
+            synchronized (this){
+                return FileOperation.save(StorageConfig.MessagePath+"mq_1",message);
+            }
+        } catch (IOException | InterruptedException e) {
+            logger.error("save filer error",e);
+        }
+        return null;
+    }
 
+    public Message readMessage(MessageDurability messageDurability){
+        try {
+            byte[] read = FileOperation.read(StorageConfig.MessagePath + "mq_1", messageDurability.getOffset());
+            Object object = ObjectByteUtils.toObject(read);
 
-
-
-
+            if (object instanceof Message){
+                return (Message)object;
+            }
+            return null;
+        } catch (IOException | InterruptedException e) {
+            logger.error("read filer error",e);
+        }
         return null;
     }
 

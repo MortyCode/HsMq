@@ -1,12 +1,19 @@
 package com.hsms.mqserver.data;
 
 import com.hsmq.data.Message;
+import com.hsmq.data.Pull;
 import com.hsmq.enums.ResultEnum;
+import com.hsmq.storage.data.MessageStorage;
+import com.hsmq.storage.durability.MessageDurability;
+import io.netty.util.internal.logging.InternalLogger;
+import io.netty.util.internal.logging.InternalLoggerFactory;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author ：河神
@@ -14,31 +21,58 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class MessageStore {
 
-    private static ConcurrentHashMap<String,ConcurrentLinkedQueue<Message>> data = new ConcurrentHashMap<>();
+    private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
+//    private static ConcurrentHashMap<String,ConcurrentLinkedQueue<Message>> data = new ConcurrentHashMap<>();
 
 
-    public Message pullMessage(String topic){
-        ConcurrentLinkedQueue<Message> queue;
-        if ((queue=data.get(topic))==null){
+    private static ConcurrentMap<String,ConcurrentMap<String,ConsumerQueue>> data =
+            new ConcurrentHashMap<>();
+
+
+    private MessageStorage messageStorage = new MessageStorage();
+
+    public Message pullMessage(Pull pull){
+        ConcurrentMap<String,ConsumerQueue> queue;
+        if ((queue=data.get(pull.getTopic()))==null){
+            queue = new ConcurrentHashMap<>();
+            data.put(pull.getTopic(),queue);
             return null;
         }
-        return queue.poll();
+
+        ConsumerQueue consumerQueue;
+        if ((consumerQueue=queue.get(pull.getConsumerName()))==null){
+            consumerQueue = new ConsumerQueue();
+            queue.put(pull.getConsumerName(),consumerQueue);
+            return null;
+        }
+
+        return consumerQueue.pullMessage();
     }
 
     public String save(Message message){
-        ConcurrentLinkedQueue<Message> queue = data.get(message.getTopic());
-        if (queue==null){
+
+        String msgId = UUID.randomUUID().toString();
+        message.setMsgId(msgId);
+
+        MessageDurability messageDurability = messageStorage.saveMessage(message);
+        messageDurability.setTags(message.getTag());
+        logger.info("messageDurability:{}",messageDurability);
+
+
+        ConcurrentMap<String, ConsumerQueue> consumerQueueMap = data.get(message.getTopic());
+        if (consumerQueueMap==null){
             synchronized (this){
-                queue = data.get(message.getTopic());
-                if (queue==null){
-                    queue = new ConcurrentLinkedQueue<>();
-                    data.put(message.getTopic(),queue);
+                consumerQueueMap = data.get(message.getTopic());
+                if (consumerQueueMap==null){
+                    consumerQueueMap = new ConcurrentHashMap<>();
                 }
             }
         }
-        String msgId = UUID.randomUUID().toString();
-        message.setMsgId(msgId);
-        queue.add(message);
+
+        for (Map.Entry<String, ConsumerQueue> entry : consumerQueueMap.entrySet()) {
+            entry.getValue().addMessage(messageDurability);
+        }
+
         return msgId;
     }
 

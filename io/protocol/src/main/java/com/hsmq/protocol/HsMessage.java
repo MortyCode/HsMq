@@ -17,9 +17,6 @@ public class HsMessage<T> {
 
         hsMessage.appendArray(new byte[]{1,2,3});
         hsMessage.appendArray(new byte[]{4,5,6});
-        for (byte b : hsMessage.getDataArray()) {
-            System.out.println(b);
-        }
 
         Message message = new Message();
         message.setTopic("TopicA");

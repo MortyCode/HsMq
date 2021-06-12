@@ -6,6 +6,8 @@ import com.hsmq.protocol.HsDecodeData;
 import com.hsmq.protocol.HsMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.internal.logging.InternalLogger;
+import io.netty.util.internal.logging.InternalLoggerFactory;
 
 /**
  * @author ：河神
@@ -13,9 +15,11 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class ProducerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
 
+    private static InternalLogger logger = InternalLoggerFactory.getInstance(ProducerHandel.class);
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData decodeData) throws Exception {
-        System.out.println("消息发送："+decodeData.getData());
+        logger.info("消息发送:{}：",decodeData.getData());
     }
 
 }

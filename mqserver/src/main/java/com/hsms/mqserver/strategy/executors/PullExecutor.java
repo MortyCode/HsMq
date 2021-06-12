@@ -17,7 +17,7 @@ public class PullExecutor extends BaseExecutor<Pull,Message>{
     public HsResp<Message> executor(HsReq<Pull> hsReq) {
 
         Pull pull = hsReq.getData();
-        Message message = messageStore.pullMessage(pull.getTopic());
+        Message message = messageStore.pullMessage(pull);
 
         HsResp<Message> resp = new HsResp<>();
         resp.setData(message);

@@ -20,6 +20,5 @@ public class ObjectEncode extends MessageToByteEncoder<Message> {
 
         out.writeInt(hsMessage.getLength());
         out.writeBytes(hsMessage.getDataArray());
-//        System.out.println("编码完成");
     }
 }

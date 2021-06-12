@@ -10,10 +10,10 @@ public class Pull implements Serializable {
 
     private static final long serialVersionUID = -20210610L;
 
-    private String consumer;
+    private String consumerName;
 
     private String topic;
-    private String tag;
+    private String tags;
 
     public String getTopic() {
         return topic;
@@ -23,12 +23,19 @@ public class Pull implements Serializable {
         this.topic = topic;
     }
 
-    public String getTag() {
-        return tag;
+    public String getConsumerName() {
+        return consumerName;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setConsumerName(String consumerName) {
+        this.consumerName = consumerName;
     }
 
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
 }
