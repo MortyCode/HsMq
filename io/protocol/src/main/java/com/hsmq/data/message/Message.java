@@ -1,4 +1,4 @@
-package com.hsmq.data;
+package com.hsmq.data.message;
 
 import java.io.Serializable;
 import java.util.StringJoiner;

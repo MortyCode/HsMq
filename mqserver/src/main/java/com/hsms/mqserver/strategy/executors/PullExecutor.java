@@ -2,10 +2,12 @@ package com.hsms.mqserver.strategy.executors;
 
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
-import com.hsmq.data.Message;
-import com.hsmq.data.Pull;
+import com.hsmq.data.message.Message;
+import com.hsmq.data.message.Pull;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
+
+import java.util.List;
 
 /**
  * @author ：河神
@@ -17,10 +19,10 @@ public class PullExecutor extends BaseExecutor<Pull,Message>{
     public HsResp<Message> executor(HsReq<Pull> hsReq) {
 
         Pull pull = hsReq.getData();
-        Message message = messageStore.pullMessage(pull);
+        List<Message> messages = messageStore.pullMessage(pull);
 
         HsResp<Message> resp = new HsResp<>();
-        resp.setData(message);
+        resp.setDatas(messages);
         resp.setOperation(OperationEnum.Resp.getOperation());
         resp.setResult(ResultEnum.SendOK.getCode());
         return resp;

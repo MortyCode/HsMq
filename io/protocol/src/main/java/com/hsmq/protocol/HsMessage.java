@@ -1,6 +1,6 @@
 package com.hsmq.protocol;
 
-import com.hsmq.data.Message;
+import com.hsmq.data.message.Message;
 import com.hsmq.utils.ObjectByteUtils;
 
 import java.lang.reflect.Array;

@@ -2,11 +2,10 @@ package com.hsms.mqserver.strategy.executors;
 
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
-import com.hsmq.data.Message;
+import com.hsmq.data.message.Message;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
 
-import java.util.Properties;
 import java.util.UUID;
 
 /**

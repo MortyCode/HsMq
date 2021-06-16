@@ -2,7 +2,7 @@ package com.hsmq.producer;
 
 import com.hsmq.data.Head;
 import com.hsmq.data.HsReq;
-import com.hsmq.data.Message;
+import com.hsmq.data.message.Message;
 import com.hsmq.enums.MessageEnum;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.producer.reactor.ProducerClient;
@@ -44,7 +44,7 @@ public class ProducerStartup {
             hsReq.setData(message);
             hsEecodeData.setData(hsReq);
 
-            Thread.sleep(1000L);
+            Thread.sleep(10L);
             channelFuture.channel().writeAndFlush(hsEecodeData).sync();
         }
     }

@@ -1,19 +1,13 @@
 package com.hsms.mqserver.data;
 
-import com.hsmq.data.Message;
-import com.hsmq.data.Pull;
-import com.hsmq.enums.ResultEnum;
+import com.hsmq.data.message.Message;
+import com.hsmq.data.message.Pull;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentMap;
+import java.util.List;
 
 /**
  * @author ：河神
@@ -34,12 +28,12 @@ public class MessageStore {
 
     private MessageStorage messageStorage = new MessageStorage();
 
-    public Message pullMessage(Pull pull){
+    public List<Message> pullMessage(Pull pull){
         ConsumerQueue consumerQueue = consumerQueueManger.getAndRegister(pull);
         if (consumerQueue==null){
             return null;
         }
-        return consumerQueue.pullMessage();
+        return consumerQueue.pullMessage(pull.getSize());
     }
 
     public void saveMessage(Message message){

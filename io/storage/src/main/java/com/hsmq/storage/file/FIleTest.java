@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 零拷贝
@@ -23,9 +25,27 @@ public class FIleTest {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        MessageDurability messageDurability = FileOperation.save(StorageConfig.MessagePath+"data-0001", "长颈鹿吃树叶");
-        byte[] read = FileOperation.read(StorageConfig.MessagePath+"data-0001", messageDurability.getOffset());
-        logger.info(ObjectByteUtils.toObject(read).toString());
+        MessageDurability messageDurability1 = FileOperation.save(StorageConfig.MessagePath+"data-0001", "长颈鹿吃树叶");
+        MessageDurability messageDurability2 = FileOperation.save(StorageConfig.MessagePath+"data-0001", "长颈鹿吃树叶");
+        MessageDurability messageDurability3 = FileOperation.save(StorageConfig.MessagePath+"data-0001", "长颈鹿吃树叶");
+
+        FileChannel fileChannel =
+                new RandomAccessFile(StorageConfig.MessagePath+"data-0001", "r").getChannel();
+
+        List<MessageDurability> data  = new ArrayList<>();
+
+        data.add(messageDurability1);
+        data.add(messageDurability2);
+        data.add(messageDurability3);
+
+        for (MessageDurability datum : data) {
+            byte[] read1 = FileOperation.read(fileChannel, datum.getOffset(),datum.getLength());
+            logger.info(ObjectByteUtils.toObject(read1).toString());
+        }
+
+        fileChannel.close();
+
+
     }
 
 }

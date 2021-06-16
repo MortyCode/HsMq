@@ -1,18 +1,9 @@
 package com.hsmq.consumer;
 
+import com.hsmq.consumer.executos.ExecutorMessageTask;
+import com.hsmq.consumer.executos.PullMessageTask;
 import com.hsmq.consumer.reactor.ConsumerClient;
-import com.hsmq.data.Head;
-import com.hsmq.data.HsReq;
-import com.hsmq.data.Message;
-import com.hsmq.data.Pull;
-import com.hsmq.enums.MessageEnum;
-import com.hsmq.enums.OperationEnum;
-import com.hsmq.protocol.HsBaseData;
-import com.hsmq.protocol.HsEecodeData;
 import io.netty.channel.ChannelFuture;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author ：河神
@@ -30,24 +21,9 @@ public class ClientStartup {
 
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
 
-        HsEecodeData hsEecodeData = new HsEecodeData();
-        hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
-        HsReq<Pull> hsReq = new HsReq<>();
-        Pull pull = new Pull();
-        pull.setTopic(topic);
-        pull.setConsumerName("AConsumer");
-        hsReq.setData(pull);
-        hsReq.setOperation(OperationEnum.Pull.getOperation());
-        hsEecodeData.setData(hsReq);
+        new Thread(new PullMessageTask(channelFuture, topic)).start();
+        new Thread(new ExecutorMessageTask(channelFuture,topic)).start();
 
-        for (;;){
-            try {
-                Thread.sleep(1L);
-                channelFuture.channel().writeAndFlush(hsEecodeData).sync();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
     }
 

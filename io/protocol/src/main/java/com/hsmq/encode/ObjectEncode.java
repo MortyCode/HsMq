@@ -1,6 +1,6 @@
 package com.hsmq.encode;
 
-import com.hsmq.data.Message;
+import com.hsmq.data.message.Message;
 import com.hsmq.protocol.HsMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

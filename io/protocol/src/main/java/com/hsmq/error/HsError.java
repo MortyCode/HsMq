@@ -1,5 +1,6 @@
-package com.hsmq.data;
+package com.hsmq.error;
 
+import com.hsmq.data.HsResp;
 import com.hsmq.enums.ResultEnum;
 
 /**

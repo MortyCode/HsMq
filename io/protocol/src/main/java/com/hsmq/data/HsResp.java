@@ -3,6 +3,7 @@ package com.hsmq.data;
 import com.hsmq.enums.ResultEnum;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author ：河神
@@ -18,6 +19,8 @@ public class HsResp<T> implements Serializable {
     private String operation;
 
     private T data;
+
+    private List<T> datas;
 
     public Integer getResult() {
         return result;
@@ -43,6 +46,13 @@ public class HsResp<T> implements Serializable {
         this.data = data;
     }
 
+    public List<T> getDatas() {
+        return datas;
+    }
+
+    public void setDatas(List<T> datas) {
+        this.datas = datas;
+    }
 
     public static HsResp<Void> typeError(){
         HsResp<Void> resp = new HsResp<>();

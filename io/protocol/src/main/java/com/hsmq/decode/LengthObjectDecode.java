@@ -17,6 +17,10 @@ import java.nio.ByteBuffer;
 public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
 
 
+    public static void main(String[] args) {
+        System.out.println(Integer.MAX_VALUE);
+    }
+
     private static final int FRAME_MAX_LENGTH =
             Integer.parseInt(System.getProperty("com.hsmq.frameMaxLength", "16777216"));
 

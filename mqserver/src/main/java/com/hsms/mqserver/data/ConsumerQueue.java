@@ -1,9 +1,11 @@
 package com.hsms.mqserver.data;
 
-import com.hsmq.data.Message;
+import com.hsmq.data.message.Message;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -18,20 +20,27 @@ public class ConsumerQueue {
 
     private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue = new ConcurrentLinkedQueue<>();
 
-    public Message pullMessage(){
-        MessageDurability messageDurability = messageMappingQueue.poll();
-        if (messageDurability==null){
+    public List<Message> pullMessage(int size){
+
+        List<MessageDurability> data = new ArrayList<>();
+        for(int i=0;i<size;size++){
+            MessageDurability messageDurability = messageMappingQueue.poll();
+            if (messageDurability==null){
+                break;
+            }
+            data.add(messageDurability);
+        }
+        if (data.size()==0){
             return null;
         }
-        return messageStorage.readMessage(messageDurability);
+
+        return messageStorage.readMessages(data);
     }
 
     public void addMessage(MessageDurability messageDurability){
 //        if (isAdd(messageDurability)){
 //        }
-
         messageMappingQueue.add(messageDurability);
-
     }
 
     private boolean isAdd(MessageDurability messageDurability){

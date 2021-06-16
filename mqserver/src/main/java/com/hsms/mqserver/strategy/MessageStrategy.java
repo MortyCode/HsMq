@@ -1,14 +1,9 @@
 package com.hsms.mqserver.strategy;
 
-import com.hsmq.data.Head;
-import com.hsmq.data.HsError;
+import com.hsmq.error.HsError;
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
-import com.hsmq.data.Message;
-import com.hsmq.data.Pull;
-import com.hsmq.enums.MessageEnum;
 import com.hsmq.enums.OperationEnum;
-import com.hsmq.enums.ResultEnum;
 import com.hsmq.protocol.HsDecodeData;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
@@ -31,6 +26,7 @@ public class MessageStrategy {
         enumExecutorMap = new HashMap<>();
         enumExecutorMap.put(OperationEnum.Message,new MessageExecutor());
         enumExecutorMap.put(OperationEnum.Pull,new PullExecutor());
+        enumExecutorMap.put(OperationEnum.Confirm,new PullExecutor());
     }
 
 

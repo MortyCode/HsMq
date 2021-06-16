@@ -1,6 +1,6 @@
 package com.hsmq.storage.data;
 
-import com.hsmq.data.Message;
+import com.hsmq.data.message.Message;
 import com.hsmq.storage.config.StorageConfig;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.storage.file.FileOperation;
@@ -9,6 +9,7 @@ import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author ：河神
@@ -42,6 +43,10 @@ public class MessageStorage {
             logger.error("read filer error",e);
         }
         return null;
+    }
+
+    public List<Message> readMessages(List<MessageDurability> messageDurabilitys){
+        return FileOperation.readMessages(StorageConfig.MessagePath + "mq_1",messageDurabilitys);
     }
 
 

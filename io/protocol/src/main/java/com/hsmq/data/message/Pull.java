@@ -1,4 +1,4 @@
-package com.hsmq.data;
+package com.hsmq.data.message;
 
 import java.io.Serializable;
 
@@ -11,8 +11,8 @@ public class Pull implements Serializable {
     private static final long serialVersionUID = -20210610L;
 
     private String consumerName;
-
     private String topic;
+    private int size;
     private String tags;
 
     public String getTopic() {
@@ -37,5 +37,13 @@ public class Pull implements Serializable {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

@@ -1,7 +1,7 @@
 package com.hsms.mqserver.data;
 
-import com.hsmq.data.Message;
-import com.hsmq.data.Pull;
+import com.hsmq.data.message.Message;
+import com.hsmq.data.message.Pull;
 import com.hsmq.storage.durability.MessageDurability;
 
 import java.util.Map;
