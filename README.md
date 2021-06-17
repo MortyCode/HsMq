@@ -6,7 +6,7 @@
  
 
 ---
-![a](zimage/hs.jpeg) 金斧头，银斧头，你要什么？
+![a](zimage/hs.jpeg) 
 ---
 ```
 v 1.0.0 河神大人
