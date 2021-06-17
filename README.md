@@ -1,15 +1,12 @@
 ## HeShenMQ
-[![version](https://img.shields.io/badge/java--version-java--8-orange)]()
+[![version](https://img.shields.io/badge/java--version-1.8-orange)]()
 [![version](https://img.shields.io/badge/io-netty-blue)](https://github.com/netty/netty)
 [![version](https://img.shields.io/badge/license-MIT-green)]()
-
- 
-
+[![version](https://img.shields.io/badge/version-1.0--SNAPSHOT-brightgreen)]()
 ---
 ![a](zimage/hs.jpeg) 
 ---
 ```
-v 1.0.0 河神大人
  _   _   _____       ___  ___   _____    
 | | | | /  ___/     /   |/   | /  _  \   
 | |_| | | |___     / /|   /| | | | | |   
