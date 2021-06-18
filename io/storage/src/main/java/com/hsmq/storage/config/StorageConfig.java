@@ -7,7 +7,16 @@ package com.hsmq.storage.config;
 public class StorageConfig {
 
     public static final String MessagePath = System.getProperty("user.home")+"/data/";
-    public static final String CountStorage = System.getProperty("user.home")+"/count/";
+
+    public static String rootPath = System.getProperty("user.home")+"/hsmq/";
+
+    public static final String MessageStorage = rootPath+"storage";
+
+    public static final String MessageQueue = rootPath+"message_queue";
+
+    public static final String ConsumerMessageQueue = rootPath+"consumer_message_queue";
+
+
 
 
 }

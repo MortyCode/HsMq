@@ -62,6 +62,23 @@ public class FileOperation {
         return bytes;
     }
 
+
+    public static byte[] read(FileChannel fileChannel,long offset) throws IOException, InterruptedException{
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+        fileChannel.read(byteBuffer,offset);
+        byteBuffer.flip();
+
+        int length = byteBuffer.getInt();
+
+        ByteBuffer dataBuffer = ByteBuffer.allocate(length);
+        fileChannel.read(dataBuffer,offset+4);
+        dataBuffer.flip();
+
+        byte[] bytes = new byte[length];
+        dataBuffer.get(bytes);
+        return bytes;
+    }
+
     public static byte[] read(String fileName,long offset) throws IOException, InterruptedException{
         FileChannel fileChannel =
                 new RandomAccessFile(fileName, "r").getChannel();
@@ -82,21 +99,6 @@ public class FileOperation {
         return bytes;
     }
 
-    public static byte[] read(FileChannel fileChannel,long offset) throws IOException, InterruptedException{
-        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
-        fileChannel.read(byteBuffer,offset);
-        byteBuffer.flip();
-
-        int length = byteBuffer.getInt();
-
-        ByteBuffer dataBuffer = ByteBuffer.allocate(length);
-        fileChannel.read(dataBuffer,offset+4);
-        dataBuffer.flip();
-
-        byte[] bytes = new byte[length];
-        dataBuffer.get(bytes);
-        return bytes;
-    }
 
     public static byte[] read(FileChannel fileChannel,long offset,int length) throws IOException, InterruptedException{
         ByteBuffer byteBuffer = ByteBuffer.allocate(length);

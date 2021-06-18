@@ -1,14 +1,14 @@
-package com.hsmq.storage.file;
+package com.hs.filer;
 
 import com.hsmq.storage.config.StorageConfig;
 import com.hsmq.storage.durability.MessageDurability;
+import com.hsmq.storage.file.FileOperation;
 import com.hsmq.utils.ObjectByteUtils;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,6 @@ public class FIleTest {
             byte[] read1 = FileOperation.read(fileChannel, datum.getOffset(),datum.getLength());
             logger.info(ObjectByteUtils.toObject(read1).toString());
         }
-
         fileChannel.close();
 
 

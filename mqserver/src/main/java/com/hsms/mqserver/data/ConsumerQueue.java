@@ -18,11 +18,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConsumerQueue {
 
-    private String topic;
-    private String tag;
     private MessageStorage messageStorage = new MessageStorage();
 
-    private LinkedBlockingQueue<MessageDurability> messageMappingQueue = new LinkedBlockingQueue<>();
+    private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue = new ConcurrentLinkedQueue<>();
 
     public List<Message> pullMessage(int size){
         List<MessageDurability> data = new ArrayList<>();
@@ -41,13 +39,6 @@ public class ConsumerQueue {
     }
 
     public void addMessage(MessageDurability messageDurability){
-//        if (isAdd(messageDurability)){
-//        }
         messageMappingQueue.add(messageDurability);
     }
-
-    private boolean isAdd(MessageDurability messageDurability){
-        return tag.equals(messageDurability.getTags());
-    }
-
 }

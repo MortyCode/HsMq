@@ -13,6 +13,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author ：河神
  * @date ：Created in 2021/6/4 3:53 下午
@@ -47,6 +49,12 @@ public class ObjectReactor {
         serverBootstrap.childOption(ChannelOption.SO_KEEPALIVE,true);
 
         ChannelFuture channelFuture = serverBootstrap.bind(port).sync();
+
+        //定时任务
+        channelFuture.channel().eventLoop().scheduleWithFixedDelay(()->{
+            System.out.println("定时任务："+System.currentTimeMillis());
+        },1, 3L,TimeUnit.SECONDS);
+
         channelFuture.channel().closeFuture().sync();
     }
 }

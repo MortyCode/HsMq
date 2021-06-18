@@ -30,7 +30,7 @@ public class MessageStorage {
         return null;
     }
 
-    public Message readMessage(MessageDurability messageDurability){
+    public static Message readMessage(MessageDurability messageDurability){
         try {
             byte[] read = FileOperation.read(StorageConfig.MessagePath + "mq_1", messageDurability.getOffset());
             Object object = ObjectByteUtils.toObject(read);
