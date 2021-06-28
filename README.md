@@ -3,9 +3,6 @@
 [![version](https://img.shields.io/badge/io-netty-blue)](https://github.com/netty/netty)
 [![version](https://img.shields.io/badge/license-MIT-green)]()
 [![version](https://img.shields.io/badge/version-1.0--SNAPSHOT-brightgreen)]()
----
-![a](zimage/hs.jpeg) 
----
 ```
  _   _   _____       ___  ___   _____    
 | | | | /  ___/     /   |/   | /  _  \   
