@@ -7,9 +7,9 @@ import com.hsmq.enums.OperationEnum;
 import com.hsmq.protocol.HsDecodeData;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
-import com.hsms.mqserver.strategy.executors.ConfirmExecutor;
-import com.hsms.mqserver.strategy.executors.SendMessageExecutor;
-import com.hsms.mqserver.strategy.executors.PullExecutor;
+import com.hsms.mqserver.strategy.executors.impl.ConfirmExecutor;
+import com.hsms.mqserver.strategy.executors.impl.SendMessageExecutor;
+import com.hsms.mqserver.strategy.executors.impl.PullExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +21,14 @@ import java.util.Map;
 public class MessageStrategy {
 
 
-    private static Map<OperationEnum, BaseExecutor<?,?>> enumExecutorMap ;
+    private static Map<OperationEnum, BaseExecutor<?>> enumExecutorMap ;
 
     static {
         enumExecutorMap = new HashMap<>();
         enumExecutorMap.put(OperationEnum.SendMessage,new SendMessageExecutor());
         enumExecutorMap.put(OperationEnum.Pull,new PullExecutor());
         enumExecutorMap.put(OperationEnum.Confirm,new ConfirmExecutor());
+        System.out.println("init MessageStrategy");
     }
 
     public static HsEecodeData executor(HsDecodeData hsDecodeData){
@@ -38,7 +39,7 @@ public class MessageStrategy {
             return HsEecodeData.resp(HsError.ParameterWrongType);
         }
 
-        BaseExecutor<?,?> baseExecutor = enumExecutorMap.get(operationEnum);
+        BaseExecutor<?> baseExecutor = enumExecutorMap.get(operationEnum);
         HsResp<?> hsResp = baseExecutor.executor0(hsReq);
         return HsEecodeData.resp(hsResp);
     }

@@ -1,7 +1,9 @@
 package com.hsms.mqserver;
 
 
+import com.hsms.mqserver.config.ServerConfig;
 import com.hsms.mqserver.reactor.ObjectReactor;
+import com.hsms.mqserver.server.MqServerBootstrap;
 
 /**
  * @author ：河神
@@ -10,10 +12,10 @@ import com.hsms.mqserver.reactor.ObjectReactor;
 public class ServerStartup {
 
     public static void main(String[] args) {
-        start(args);
+        start0(args);
     }
 
-    public static void start(String[] args){
+    public static void start0(String[] args){
         try {
             String start =
                     " _   _  _____        _____                          \n" +
@@ -23,12 +25,18 @@ public class ServerStartup {
                             "| | | |/\\__/ /      /\\__/ /  __/ |   \\ V /  __/ |   \n" +
                             "\\_| |_/\\____/       \\____/ \\___|_|    \\_/ \\___|_|   \n";
             System.out.println(start);
+            buildConfig();
+            new MqServerBootstrap().start();
 
-            ObjectReactor baseServer = new ObjectReactor(9001);
-            baseServer.start();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void buildConfig(){
+        ServerConfig.port = 9001;
+
     }
 
 

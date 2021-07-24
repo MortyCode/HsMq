@@ -44,13 +44,11 @@ public class ConsumerMessageQueue {
     public PullMessage getMessage(){
         //获取队列中的消息
 
-
-
-        return sendMessageMappingQueue.poll();
+        return null;
     }
 
     public boolean isEmpty(){
-        return sendMessageMappingQueue.size()==0;
+        return false;
     }
 
     public String getTopic() {

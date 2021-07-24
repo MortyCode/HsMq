@@ -17,7 +17,6 @@ public class ConsumerQueueManger {
     private static ConcurrentMap<String, ConcurrentMap<String,ConsumerQueue>> data =
             new ConcurrentHashMap<>();
 
-
     public ConsumerQueue getAndRegister(Pull pull){
 
         ConcurrentMap<String,ConsumerQueue> queue;
@@ -35,6 +34,10 @@ public class ConsumerQueueManger {
         }
 
         return consumerQueue;
+    }
+
+    public boolean existsTopic(SendMessage sendMessage){
+        return data.get(sendMessage.getTopic())!=null;
     }
 
     public void pushConsumerQueue(SendMessage sendMessage, MessageDurability messageDurability){

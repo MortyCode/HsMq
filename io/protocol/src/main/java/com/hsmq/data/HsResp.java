@@ -18,6 +18,8 @@ public class HsResp<T> implements Serializable {
 
     private String operation;
 
+    private boolean success = true;
+
     private T data;
 
     private List<T> datas;
@@ -50,6 +52,14 @@ public class HsResp<T> implements Serializable {
         return datas;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
     public void setDatas(List<T> datas) {
         this.datas = datas;
     }
@@ -57,12 +67,21 @@ public class HsResp<T> implements Serializable {
     public static HsResp<Void> typeError(){
         HsResp<Void> resp = new HsResp<>();
         resp.setResult(ResultEnum.ParameterWrongType.getCode());
+        resp.setSuccess(false);
+        return resp;
+    }
+
+    public static HsResp<Void> topicNotExistsError(){
+        HsResp<Void> resp = new HsResp<>();
+        resp.setResult(ResultEnum.TopicNotExists.getCode());
+        resp.setSuccess(false);
         return resp;
     }
 
     public static HsResp<Void> error(ResultEnum resultEnum){
         HsResp<Void> resp = new HsResp<>();
         resp.setResult(ResultEnum.ParameterWrongType.getCode());
+        resp.setSuccess(false);
         return resp;
     }
 }

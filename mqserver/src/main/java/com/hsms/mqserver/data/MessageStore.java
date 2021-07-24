@@ -1,7 +1,10 @@
 package com.hsms.mqserver.data;
 
+import com.hsmq.data.HsResp;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.data.message.Pull;
+import com.hsmq.enums.OperationEnum;
+import com.hsmq.enums.ResultEnum;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 import io.netty.util.internal.logging.InternalLogger;
@@ -31,10 +34,22 @@ public class MessageStore {
         return consumerQueue.pullMessage(pull);
     }
 
-    public void saveMessage(SendMessage sendMessage){
+    public HsResp<?> saveMessage(SendMessage sendMessage){
+
+        boolean existsTopic = consumerQueueManger.existsTopic(sendMessage);
+        if (!existsTopic){
+            return HsResp.topicNotExistsError();
+        }
+
         MessageDurability messageDurability = messageStorage.saveMessage(sendMessage);
-        logger.info("messageDurability:{}",messageDurability);
+        logger.info("saveMessage#messageDurability:{}",messageDurability);
         consumerQueueManger.pushConsumerQueue(sendMessage,messageDurability);
+
+        HsResp<String> resp = new HsResp<>();
+        resp.setData(sendMessage.getMsgId());
+        resp.setOperation(OperationEnum.Resp.getOperation());
+        resp.setResult(ResultEnum.SendOK.getCode());
+        return resp;
     }
 
 }

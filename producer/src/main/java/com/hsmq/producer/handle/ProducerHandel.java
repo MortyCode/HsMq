@@ -1,5 +1,6 @@
 package com.hsmq.producer.handle;
 
+import com.alibaba.fastjson.JSON;
 import com.hsmq.protocol.HsDecodeData;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -16,7 +17,7 @@ public class ProducerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData decodeData) throws Exception {
-        logger.info("消息发送:{}：",decodeData.getData());
+        logger.info("消息发送:{}：",JSON.toJSONString(decodeData.getData()));
     }
 
 }

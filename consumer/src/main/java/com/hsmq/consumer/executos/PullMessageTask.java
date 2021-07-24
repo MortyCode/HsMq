@@ -45,10 +45,12 @@ public class PullMessageTask implements Runnable{
         HsEecodeData hsEecodeData = new HsEecodeData();
         hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
         HsReq<Pull> hsReq = new HsReq<>();
+
         Pull pull = new Pull();
         pull.setTopic(topic);
         pull.setConsumerName("AConsumer");
         pull.setSize(10);
+
         hsReq.setData(pull);
         hsReq.setOperation(OperationEnum.Pull.getOperation());
         hsEecodeData.setData(hsReq);

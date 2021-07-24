@@ -11,6 +11,7 @@ public enum ResultEnum {
      */
     SendOK(200,"SendOK"),
     ParameterWrongType(1000,"Wrong Parameter type"),
+    TopicNotExists(1001,"Topic Not Exists type"),
 
 
 

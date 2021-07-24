@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * 持久化消息
  * @author ：河神
  * @date ：Created in 2021/6/11 3:12 下午
  */
@@ -19,6 +20,11 @@ public class MessageStorage {
 
     private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
 
+    /**
+     * 存储消息
+     * @param sendMessage
+     * @return
+     */
     public MessageDurability saveMessage(SendMessage sendMessage){
         try {
             synchronized (this){

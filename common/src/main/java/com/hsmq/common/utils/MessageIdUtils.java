@@ -11,9 +11,9 @@ public class MessageIdUtils {
 
     public static String newMsgId(String topic){
         String name = ManagementFactory.getRuntimeMXBean().getName();
-        System.out.println(name.split("@")[0]);
         String s = name.split("@")[0];
-        return topic+s+System.nanoTime();
+
+        return topic+":"+s+":"+System.nanoTime();
     }
 
 }
