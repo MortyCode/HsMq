@@ -1,16 +1,13 @@
 package com.hsms.mqserver.data;
 
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author ：河神
@@ -22,7 +19,8 @@ public class ConsumerQueue {
 
     private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue = new ConcurrentLinkedQueue<>();
 
-    public List<Message> pullMessage(int size){
+    public List<SendMessage> pullMessage(Pull pull){
+        int size = pull.getSize();
         List<MessageDurability> data = new ArrayList<>();
         for(int i=0;i<size;size++){
             MessageDurability messageDurability = messageMappingQueue.poll();

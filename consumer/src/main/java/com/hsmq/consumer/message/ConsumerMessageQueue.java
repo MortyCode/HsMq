@@ -1,9 +1,12 @@
 package com.hsmq.consumer.message;
 
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.PullMessage;
+import com.hsmq.data.message.SendMessage;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -13,39 +16,44 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ConsumerMessageQueue {
 
 
-    private ConcurrentLinkedQueue<Message> messageMappingQueue = new ConcurrentLinkedQueue<>();
-    private static volatile ConsumerMessageQueue consumerMessageQueue;
-    private  ConsumerMessageQueue(){}
+    private final Map<Integer,ConcurrentLinkedQueue<PullMessage>> queueMap = new ConcurrentHashMap<>();
 
-    public static ConsumerMessageQueue getConsumerMessageQueue(){
+    private final Map<Integer,Long> offSetMap = new ConcurrentHashMap<>();
 
-        if (consumerMessageQueue!=null){
-            return consumerMessageQueue;
-        }else {
-            synchronized (ConsumerMessageQueue.class){
-                if (consumerMessageQueue!=null){
-                    return consumerMessageQueue;
-                }
-                consumerMessageQueue = new ConsumerMessageQueue();
+    private final String topic;
 
-            }
-        }
-        return consumerMessageQueue;
+    public ConsumerMessageQueue(String topic ) {
+        this.topic = topic;
     }
 
-    public void addMessage(List<Message> messages){
-        if (CollectionUtils.isEmpty(messages)){
+    public void addMessage(List<PullMessage> pullMessages){
+        if (CollectionUtils.isEmpty(pullMessages)){
             return;
         }
-        messageMappingQueue.addAll(messages);
+        for (PullMessage pullMessage : pullMessages) {
+            Integer queueId = pullMessage.getQueueId();
+            ConcurrentLinkedQueue<PullMessage> queue ;
+            if ((queue=queueMap.get(queueId))==null){
+                queue = new ConcurrentLinkedQueue<>();
+                queueMap.put(queueId,queue);
+            }
+            queue.add(pullMessage);
+        }
     }
 
-    public Message getMessage(){
-        return messageMappingQueue.poll();
+    public PullMessage getMessage(){
+        //获取队列中的消息
+
+
+
+        return sendMessageMappingQueue.poll();
     }
 
     public boolean isEmpty(){
-        return messageMappingQueue.size()==0;
+        return sendMessageMappingQueue.size()==0;
     }
 
+    public String getTopic() {
+        return topic;
+    }
 }

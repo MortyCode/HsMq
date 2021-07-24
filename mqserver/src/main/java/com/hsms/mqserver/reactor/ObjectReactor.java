@@ -52,7 +52,7 @@ public class ObjectReactor {
 
         //定时任务
         channelFuture.channel().eventLoop().scheduleWithFixedDelay(()->{
-            System.out.println("定时任务："+System.currentTimeMillis());
+            //定时任务
         },1, 3L,TimeUnit.SECONDS);
 
         channelFuture.channel().closeFuture().sync();

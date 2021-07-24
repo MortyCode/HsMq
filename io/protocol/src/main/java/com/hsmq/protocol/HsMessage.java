@@ -1,6 +1,6 @@
 package com.hsmq.protocol;
 
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.utils.ObjectByteUtils;
 
 import java.lang.reflect.Array;
@@ -18,12 +18,12 @@ public class HsMessage<T> {
         hsMessage.appendArray(new byte[]{1,2,3});
         hsMessage.appendArray(new byte[]{4,5,6});
 
-        Message message = new Message();
-        message.setTopic("TopicA");
-        message.setTag("TagA");
-        message.setBody("撒撒打算打算打算打算打算打算的撒打算打算的");
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setTopic("TopicA");
+        sendMessage.setTag("TagA");
+        sendMessage.setBody("撒撒打算打算打算打算打算打算的撒打算打算的");
 
-        HsMessage<Message> hsMessage2 = new HsMessage<>(message);
+        HsMessage<SendMessage> hsMessage2 = new HsMessage<>(sendMessage);
 
     }
 

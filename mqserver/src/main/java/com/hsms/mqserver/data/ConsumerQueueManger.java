@@ -1,6 +1,6 @@
 package com.hsms.mqserver.data;
 
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.data.message.Pull;
 import com.hsmq.storage.durability.MessageDurability;
 
@@ -22,7 +22,7 @@ public class ConsumerQueueManger {
 
         ConcurrentMap<String,ConsumerQueue> queue;
         if ((queue=data.get(pull.getTopic()))==null){
-            queue = new ConcurrentHashMap<>();
+            queue = new ConcurrentHashMap<>(16);
             data.put(pull.getTopic(),queue);
             return null;
         }
@@ -37,14 +37,14 @@ public class ConsumerQueueManger {
         return consumerQueue;
     }
 
-    public void pushConsumerQueue(Message message,MessageDurability messageDurability){
-        ConcurrentMap<String, ConsumerQueue> consumerQueueMap = data.get(message.getTopic());
+    public void pushConsumerQueue(SendMessage sendMessage, MessageDurability messageDurability){
+        ConcurrentMap<String, ConsumerQueue> consumerQueueMap = data.get(sendMessage.getTopic());
         if (consumerQueueMap==null){
             synchronized (this){
-                consumerQueueMap = data.get(message.getTopic());
+                consumerQueueMap = data.get(sendMessage.getTopic());
                 if (consumerQueueMap==null){
                     consumerQueueMap = new ConcurrentHashMap<>();
-                    data.put(message.getTopic(),consumerQueueMap);
+                    data.put(sendMessage.getTopic(),consumerQueueMap);
                 }
             }
         }

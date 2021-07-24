@@ -7,7 +7,7 @@ import java.util.StringJoiner;
  * @author ：河神
  * @date ：Created in 2021/6/7 3:05 下午
  */
-public class Message implements Serializable {
+public class SendMessage implements Serializable {
 
     private static final long serialVersionUID = -20210610L;
 
@@ -60,7 +60,7 @@ public class Message implements Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Message.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", SendMessage.class.getSimpleName() + "[", "]")
                 .add("msgId='" + msgId + "'")
                 .add("topic='" + topic + "'")
                 .add("tag='" + tag + "'")

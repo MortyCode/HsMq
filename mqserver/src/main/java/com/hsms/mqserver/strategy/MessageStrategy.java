@@ -7,7 +7,8 @@ import com.hsmq.enums.OperationEnum;
 import com.hsmq.protocol.HsDecodeData;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
-import com.hsms.mqserver.strategy.executors.MessageExecutor;
+import com.hsms.mqserver.strategy.executors.ConfirmExecutor;
+import com.hsms.mqserver.strategy.executors.SendMessageExecutor;
 import com.hsms.mqserver.strategy.executors.PullExecutor;
 
 import java.util.HashMap;
@@ -24,12 +25,10 @@ public class MessageStrategy {
 
     static {
         enumExecutorMap = new HashMap<>();
-        enumExecutorMap.put(OperationEnum.Message,new MessageExecutor());
+        enumExecutorMap.put(OperationEnum.SendMessage,new SendMessageExecutor());
         enumExecutorMap.put(OperationEnum.Pull,new PullExecutor());
-        enumExecutorMap.put(OperationEnum.Confirm,new PullExecutor());
+        enumExecutorMap.put(OperationEnum.Confirm,new ConfirmExecutor());
     }
-
-
 
     public static HsEecodeData executor(HsDecodeData hsDecodeData){
         HsReq<?> hsReq = (HsReq<?>) hsDecodeData.getData();
@@ -43,7 +42,6 @@ public class MessageStrategy {
         HsResp<?> hsResp = baseExecutor.executor0(hsReq);
         return HsEecodeData.resp(hsResp);
     }
-
 
 
 }

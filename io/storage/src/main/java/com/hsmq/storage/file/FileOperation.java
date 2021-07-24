@@ -1,7 +1,7 @@
 package com.hsmq.storage.file;
 
 import com.hsmq.common.exception.FileException;
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.utils.ObjectByteUtils;
 import io.netty.util.internal.logging.InternalLogger;
@@ -111,18 +111,18 @@ public class FileOperation {
         return bytes;
     }
 
-    public static List<Message> readMessages(String fileName,List<MessageDurability> messageDurability){
+    public static List<SendMessage> readMessages(String fileName, List<MessageDurability> messageDurability){
         try {
 
             FileChannel fileChannel =
                     new RandomAccessFile(fileName, "r").getChannel();
 
-            List<Message> data = new ArrayList<>();
+            List<SendMessage> data = new ArrayList<>();
             for (MessageDurability durability : messageDurability) {
                 byte[] read = read(fileChannel, durability.getOffset(), durability.getLength());
                 Object object = ObjectByteUtils.toObject(read);
-                if (object instanceof Message){
-                    data.add((Message)object);
+                if (object instanceof SendMessage){
+                    data.add((SendMessage)object);
                 }
             }
             return data;

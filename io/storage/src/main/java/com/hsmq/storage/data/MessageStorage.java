@@ -1,6 +1,6 @@
 package com.hsmq.storage.data;
 
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.StorageConfig;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.storage.file.FileOperation;
@@ -19,10 +19,12 @@ public class MessageStorage {
 
     private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
 
-    public MessageDurability saveMessage(Message message){
+    public MessageDurability saveMessage(SendMessage sendMessage){
         try {
             synchronized (this){
-                return FileOperation.save(StorageConfig.MessagePath+"mq_1",message);
+                MessageDurability durability = FileOperation.save(StorageConfig.MessagePath + "mq_1", sendMessage);
+                durability.setTags(sendMessage.getTag());
+                return durability;
             }
         } catch (IOException | InterruptedException e) {
             logger.error("save filer error",e);
@@ -30,13 +32,13 @@ public class MessageStorage {
         return null;
     }
 
-    public static Message readMessage(MessageDurability messageDurability){
+    public static SendMessage readMessage(MessageDurability messageDurability){
         try {
             byte[] read = FileOperation.read(StorageConfig.MessagePath + "mq_1", messageDurability.getOffset());
             Object object = ObjectByteUtils.toObject(read);
 
-            if (object instanceof Message){
-                return (Message)object;
+            if (object instanceof SendMessage){
+                return (SendMessage)object;
             }
             return null;
         } catch (IOException | InterruptedException e) {
@@ -45,7 +47,7 @@ public class MessageStorage {
         return null;
     }
 
-    public List<Message> readMessages(List<MessageDurability> messageDurabilitys){
+    public List<SendMessage> readMessages(List<MessageDurability> messageDurabilitys){
         return FileOperation.readMessages(StorageConfig.MessagePath + "mq_1",messageDurabilitys);
     }
 

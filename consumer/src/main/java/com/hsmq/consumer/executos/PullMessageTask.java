@@ -15,19 +15,15 @@ import io.netty.channel.ChannelFuture;
  */
 public class PullMessageTask implements Runnable{
 
+    private final ConsumerMessageQueue consumerMessageQueue;
+    private final ChannelFuture channelFuture;
+    private final String topic;
 
-
-    private static ConsumerMessageQueue consumerMessageQueue;
-    private ChannelFuture channelFuture;
-    private String topic;
-
-    public PullMessageTask(ChannelFuture channelFuture, String topic) {
+    public PullMessageTask(ChannelFuture channelFuture,ConsumerMessageQueue consumerMessageQueue) {
         this.channelFuture = channelFuture;
-        this.topic = topic;
-    }
+        this.topic = consumerMessageQueue.getTopic();
+        this.consumerMessageQueue = consumerMessageQueue;
 
-    static {
-         consumerMessageQueue = ConsumerMessageQueue.getConsumerMessageQueue();
     }
 
     @Override

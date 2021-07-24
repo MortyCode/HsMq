@@ -1,6 +1,6 @@
 package com.hsms.mqserver.data;
 
-import com.hsmq.data.message.Message;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.data.message.Pull;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
@@ -15,32 +15,26 @@ import java.util.List;
  */
 public class MessageStore {
 
-    private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
+    private final static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
 //    private static ConcurrentHashMap<String,ConcurrentLinkedQueue<Message>> data = new ConcurrentHashMap<>();
 
-    private static ConsumerQueueManger consumerQueueManger;
-
-    static {
-        consumerQueueManger = new ConsumerQueueManger();
-    }
+    private final ConsumerQueueManger consumerQueueManger = new ConsumerQueueManger();
+    private final MessageStorage messageStorage = new MessageStorage();
 
 
-
-    private MessageStorage messageStorage = new MessageStorage();
-
-    public List<Message> pullMessage(Pull pull){
+    public List<SendMessage> pullMessage(Pull pull){
         ConsumerQueue consumerQueue = consumerQueueManger.getAndRegister(pull);
         if (consumerQueue==null){
             return null;
         }
-        return consumerQueue.pullMessage(pull.getSize());
+
+        return consumerQueue.pullMessage(pull);
     }
 
-    public void saveMessage(Message message){
-        MessageDurability messageDurability = messageStorage.saveMessage(message);
-        messageDurability.setTags(message.getTag());
+    public void saveMessage(SendMessage sendMessage){
+        MessageDurability messageDurability = messageStorage.saveMessage(sendMessage);
         logger.info("messageDurability:{}",messageDurability);
-        consumerQueueManger.pushConsumerQueue(message,messageDurability);
+        consumerQueueManger.pushConsumerQueue(sendMessage,messageDurability);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.hsmq.enums;
 
-import com.hsmq.data.message.Message;
 import com.hsmq.data.message.Pull;
 
 /**
@@ -12,7 +11,7 @@ public enum  OperationEnum {
     /**
      * 发送消息
      */
-    Message("Message", Message.class),
+    SendMessage("SendMessage", com.hsmq.data.message.SendMessage.class),
 
     /**
      * 拉取消息
@@ -22,7 +21,7 @@ public enum  OperationEnum {
     /**
      * 确认消息消费完成
      */
-    Confirm("Confirm", Message.class),
+    Confirm("Confirm", com.hsmq.data.message.SendMessage.class),
 
     /**
      * 请求返回resp
