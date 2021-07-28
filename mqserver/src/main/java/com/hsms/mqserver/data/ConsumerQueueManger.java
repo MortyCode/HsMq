@@ -3,6 +3,7 @@ package com.hsms.mqserver.data;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.data.message.Pull;
 import com.hsmq.storage.durability.MessageDurability;
+import com.hsms.mqserver.storage.MessageListener;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,15 +15,19 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class ConsumerQueueManger {
 
-    private static ConcurrentMap<String, ConcurrentMap<String,ConsumerQueue>> data =
-            new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, MessageListener> data = new ConcurrentHashMap<>();
 
-    public ConsumerQueue getAndRegister(Pull pull){
+    public static void registerTopic(String topic){
+        data.put(topic, new ConcurrentHashMap<>(16));
+    }
 
+    public static void recoveryConsumer(){
+
+    }
+
+    public static ConsumerQueue getAndRegister(Pull pull){
         ConcurrentMap<String,ConsumerQueue> queue;
         if ((queue=data.get(pull.getTopic()))==null){
-            queue = new ConcurrentHashMap<>(16);
-            data.put(pull.getTopic(),queue);
             return null;
         }
 
@@ -36,24 +41,20 @@ public class ConsumerQueueManger {
         return consumerQueue;
     }
 
-    public boolean existsTopic(SendMessage sendMessage){
+    public static boolean existsTopic(SendMessage sendMessage){
         return data.get(sendMessage.getTopic())!=null;
     }
 
-    public void pushConsumerQueue(SendMessage sendMessage, MessageDurability messageDurability){
+    public static boolean pushConsumerQueue(SendMessage sendMessage, MessageDurability messageDurability){
         ConcurrentMap<String, ConsumerQueue> consumerQueueMap = data.get(sendMessage.getTopic());
         if (consumerQueueMap==null){
-            synchronized (this){
-                consumerQueueMap = data.get(sendMessage.getTopic());
-                if (consumerQueueMap==null){
-                    consumerQueueMap = new ConcurrentHashMap<>();
-                    data.put(sendMessage.getTopic(),consumerQueueMap);
-                }
-            }
+           return false;
         }
+
         for (Map.Entry<String, ConsumerQueue> entry : consumerQueueMap.entrySet()) {
             entry.getValue().addMessage(messageDurability);
         }
+        return true;
     }
 
 }

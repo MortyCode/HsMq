@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class MessageStorage {
 
-    private static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
+    private static InternalLogger LOGGER = InternalLoggerFactory.getInstance(MessageStorage.class);
 
     /**
      * 存储消息
@@ -33,7 +33,7 @@ public class MessageStorage {
                 return durability;
             }
         } catch (IOException | InterruptedException e) {
-            logger.error("save filer error",e);
+            LOGGER.error("save filer error",e);
         }
         return null;
     }
@@ -48,7 +48,7 @@ public class MessageStorage {
             }
             return null;
         } catch (IOException | InterruptedException e) {
-            logger.error("read filer error",e);
+            LOGGER.error("read filer error",e);
         }
         return null;
     }
