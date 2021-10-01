@@ -1,14 +1,8 @@
 package com.hsmq.consumer.executos;
 
+import com.hsmq.consumer.consumer.ConsumerHandlerManger;
 import com.hsmq.consumer.message.ConsumerMessageQueue;
-import com.hsmq.data.Head;
-import com.hsmq.data.HsReq;
-import com.hsmq.data.message.Confirm;
 import com.hsmq.data.message.PullMessage;
-import com.hsmq.data.message.SendMessage;
-import com.hsmq.enums.MessageEnum;
-import com.hsmq.enums.OperationEnum;
-import com.hsmq.protocol.HsEecodeData;
 import io.netty.channel.ChannelFuture;
 
 /**
@@ -34,28 +28,15 @@ public class ExecutorMessageTask implements Runnable{
         while (true){
             PullMessage pullMessage = consumerMessageQueue.getMessage();
             if (pullMessage !=null){
-                System.out.println("消费消息"+ pullMessage);
-                try {
-                    confirm(pullMessage);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
+                boolean consumer = ConsumerHandlerManger.consumer(pullMessage);
+                if (consumer){
+                    System.out.println("消费消息"+ pullMessage);
+                    consumerMessageQueue.confirmOffset(pullMessage);
                 }
-
             }
         }
     }
 
 
-    private void confirm(PullMessage pullMessage) throws InterruptedException {
-        HsEecodeData hsEecodeData = new HsEecodeData();
-        hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
-        HsReq<Confirm> hsReq = new HsReq<>();
-        Confirm confirm = new Confirm();
-        confirm.setQueueId(pullMessage.getQueueId());
-        hsReq.setData(confirm);
-        hsReq.setOperation(OperationEnum.Confirm.getOperation());
-        hsEecodeData.setData(hsReq);
-        channelFuture.channel().writeAndFlush(hsEecodeData).sync();
-    }
 
 }

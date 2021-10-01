@@ -11,6 +11,7 @@ public class Pull implements Serializable {
     private static final long serialVersionUID = -20210610L;
 
     private String consumerName;
+    private int queueNum;
     private String topic;
     private int size;
     private String tags;
@@ -45,5 +46,13 @@ public class Pull implements Serializable {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public int getQueueNum() {
+        return queueNum;
+    }
+
+    public void setQueueNum(int queueNum) {
+        this.queueNum = queueNum;
     }
 }

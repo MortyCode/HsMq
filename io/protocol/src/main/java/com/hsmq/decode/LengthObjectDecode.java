@@ -25,6 +25,7 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
             Integer.parseInt(System.getProperty("com.hsmq.frameMaxLength", "16777216"));
 
     public LengthObjectDecode() {
+
         super(FRAME_MAX_LENGTH, 0, 4, 0, 4);
     }
 

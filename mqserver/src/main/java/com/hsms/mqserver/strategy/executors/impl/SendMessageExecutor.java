@@ -4,11 +4,7 @@ import com.hsmq.common.utils.MessageIdUtils;
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
 import com.hsmq.data.message.SendMessage;
-import com.hsmq.enums.OperationEnum;
-import com.hsmq.enums.ResultEnum;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
-
-import java.util.UUID;
 
 /**
  * @author ：河神
@@ -21,7 +17,6 @@ public class SendMessageExecutor extends BaseExecutor<SendMessage> {
     public HsResp<?> executor(HsReq<SendMessage> hsReq) {
         SendMessage sendMessage = hsReq.getData();
         sendMessage.setMsgId(MessageIdUtils.newMsgId(sendMessage.getTopic()));
-        System.out.println(sendMessage.getMsgId());
         return messageStore.saveMessage(sendMessage);
     }
 

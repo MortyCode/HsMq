@@ -19,9 +19,9 @@ public enum  OperationEnum {
     Pull("Pull", Pull.class),
 
     /**
-     * 确认消息消费完成
+     * 同步确认消息消费位点
      */
-    Confirm("Confirm", com.hsmq.data.message.SendMessage.class),
+    CommitOffset("CommitOffset", com.hsmq.data.message.SendMessage.class),
 
     /**
      * 请求返回resp

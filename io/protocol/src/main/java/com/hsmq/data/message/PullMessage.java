@@ -17,6 +17,7 @@ public class PullMessage implements Serializable {
     private String tag;
     private String key;
     private String body;
+    private Long offset;
     private Integer queueId;
 
     @Override
@@ -27,6 +28,7 @@ public class PullMessage implements Serializable {
                 .add("tag='" + tag + "'")
                 .add("key='" + key + "'")
                 .add("body='" + body + "'")
+                .add("offset=" + offset)
                 .add("queueId=" + queueId)
                 .toString();
     }
@@ -77,5 +79,13 @@ public class PullMessage implements Serializable {
 
     public void setQueueId(Integer queueId) {
         this.queueId = queueId;
+    }
+
+    public Long getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Long offset) {
+        this.offset = offset;
     }
 }

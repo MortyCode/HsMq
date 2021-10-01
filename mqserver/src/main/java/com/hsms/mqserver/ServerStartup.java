@@ -1,9 +1,12 @@
 package com.hsms.mqserver;
 
 
+import com.google.common.base.Stopwatch;
+import com.hsmq.storage.config.TopicConfig;
 import com.hsms.mqserver.config.ServerConfig;
-import com.hsms.mqserver.reactor.ObjectReactor;
 import com.hsms.mqserver.server.MqServerBootstrap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
@@ -11,27 +14,32 @@ import com.hsms.mqserver.server.MqServerBootstrap;
  */
 public class ServerStartup {
 
+    final static Logger log = LoggerFactory.getLogger(ServerStartup.class);
+
     public static void main(String[] args) {
         start0(args);
     }
 
     public static void start0(String[] args){
        String start =
-               " _   _  _____        _____                          \n" +
+               "\n _   _  _____        _____                          \n" +
                        "| | | |/  ___|      /  ___|                         \n" +
                        "| |_| |\\ `--. ______\\ `--.  ___ _ ____   _____ _ __ \n" +
                        "|  _  | `--. \\______|`--. \\/ _ \\ '__\\ \\ / / _ \\ '__|\n" +
                        "| | | |/\\__/ /      /\\__/ /  __/ |   \\ V /  __/ |   \n" +
                        "\\_| |_/\\____/       \\____/ \\___|_|    \\_/ \\___|_|   \n";
-       System.out.println(start);
+       log.info(start);
+       Stopwatch stopwatch = Stopwatch.createStarted();
        buildConfig();
        new MqServerBootstrap().start();
+        log.info("Start Server Use "+stopwatch.stop());
     }
 
 
     public static void buildConfig(){
-        ServerConfig.port = 9001;
-
+        ServerConfig.Port = 9001;
+        ServerConfig.TopicConfig.put("TopicA", TopicConfig.getDefault("TopicA"));
+        ServerConfig.TopicConfig.put("TopicB", TopicConfig.getDefault("TopicB"));
     }
 
 

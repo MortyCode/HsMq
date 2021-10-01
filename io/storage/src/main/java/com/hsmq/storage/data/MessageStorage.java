@@ -5,8 +5,8 @@ import com.hsmq.storage.config.StorageConfig;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.storage.file.FileOperation;
 import com.hsmq.utils.ObjectByteUtils;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,27 +18,27 @@ import java.util.List;
  */
 public class MessageStorage {
 
-    private static InternalLogger LOGGER = InternalLoggerFactory.getInstance(MessageStorage.class);
+    final static Logger log = LoggerFactory.getLogger(MessageStorage.class);
 
     /**
      * 存储消息
      * @param sendMessage
      * @return
      */
-    public MessageDurability saveMessage(SendMessage sendMessage){
+    public static MessageDurability saveMessage(SendMessage sendMessage){
         try {
-            synchronized (this){
+            synchronized (MessageStorage.class){
                 MessageDurability durability = FileOperation.save(StorageConfig.MessagePath + "mq_1", sendMessage);
                 durability.setTags(sendMessage.getTag());
                 return durability;
             }
         } catch (IOException | InterruptedException e) {
-            LOGGER.error("save filer error",e);
+            log.error("save filer error",e);
         }
         return null;
     }
 
-    public static SendMessage readMessage(MessageDurability messageDurability){
+    public static  SendMessage readMessage(MessageDurability messageDurability){
         try {
             byte[] read = FileOperation.read(StorageConfig.MessagePath + "mq_1", messageDurability.getOffset());
             Object object = ObjectByteUtils.toObject(read);
@@ -48,12 +48,12 @@ public class MessageStorage {
             }
             return null;
         } catch (IOException | InterruptedException e) {
-            LOGGER.error("read filer error",e);
+            log.error("read filer error",e);
         }
         return null;
     }
 
-    public List<SendMessage> readMessages(List<MessageDurability> messageDurabilitys){
+    public static List<SendMessage> readMessages(List<MessageDurability> messageDurabilitys){
         return FileOperation.readMessages(StorageConfig.MessagePath + "mq_1",messageDurabilitys);
     }
 

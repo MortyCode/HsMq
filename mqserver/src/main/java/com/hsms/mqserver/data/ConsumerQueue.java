@@ -2,12 +2,11 @@ package com.hsms.mqserver.data;
 
 import com.hsmq.data.message.Pull;
 import com.hsmq.data.message.SendMessage;
-import com.hsmq.storage.data.MessageStorage;
+import com.hsmq.storage.config.TopicConfig;
 import com.hsmq.storage.durability.MessageDurability;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @author ：河神
@@ -15,28 +14,41 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class ConsumerQueue {
 
-    private MessageStorage messageStorage = new MessageStorage();
+    private final HashMap<Integer,MessageQueue> messageMappingQueue = new HashMap<>();
+    public volatile   int queueId =  0;
+    public  int queueNum ;
 
-    private ConcurrentLinkedQueue<MessageDurability> messageMappingQueue = new ConcurrentLinkedQueue<>();
+
+    public ConsumerQueue(TopicConfig topicConfig) {
+        for (int i=0;i<topicConfig.getMessageQueueSize();i++){
+            messageMappingQueue.put(i,new MessageQueue());
+        }
+        this.queueNum = topicConfig.getMessageQueueSize();
+    }
 
     public List<SendMessage> pullMessage(Pull pull){
-        int size = pull.getSize();
-        List<MessageDurability> data = new ArrayList<>();
-        for(int i=0;i<size;size++){
-            MessageDurability messageDurability = messageMappingQueue.poll();
-            if (messageDurability==null){
-                break;
-            }
-            data.add(messageDurability);
+        MessageQueue messageQueue = messageMappingQueue.get(pull.getQueueNum());
+        if (messageQueue==null){
+            throw new RuntimeException("messageQueue is not exists");
         }
-        if (data.size()==0){
-            return null;
-        }
-
-        return messageStorage.readMessages(data);
+        return messageQueue.pullMessage(pull);
     }
 
     public void addMessage(MessageDurability messageDurability){
-        messageMappingQueue.add(messageDurability);
+        int queueId = getQueueId();
+        MessageQueue messageQueue = messageMappingQueue.get(queueId);
+        if (messageQueue==null){
+            throw new RuntimeException("messageQueue is not exists");
+        }
+
+        messageQueue.addMessage(messageDurability);
+    }
+
+    public synchronized int  getQueueId(){
+        queueId++;
+        if (queueId>10000){
+            queueId = 0;
+        }
+        return queueId%queueNum;
     }
 }

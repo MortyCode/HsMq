@@ -4,8 +4,8 @@ import com.hsmq.common.exception.FileException;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.utils.ObjectByteUtils;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class FileOperation {
 
-    private static InternalLogger logger = InternalLoggerFactory.getInstance(FileOperation.class);
+    final static Logger log = LoggerFactory.getLogger(FileOperation.class);
 
     public static MessageDurability save(String fileName,Object object) throws IOException, InterruptedException{
 
@@ -128,7 +128,7 @@ public class FileOperation {
             return data;
 
         } catch (IOException | InterruptedException e) {
-            logger.error("read filer error",e);
+            log.error("read filer error",e);
         }
         return null;
     }

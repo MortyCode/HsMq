@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.hsmq.protocol.HsDecodeData;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
@@ -13,11 +13,11 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
  */
 public class ProducerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
 
-    private static InternalLogger logger = InternalLoggerFactory.getInstance(ProducerHandel.class);
+    final static Logger log = LoggerFactory.getLogger(ProducerHandel.class);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData decodeData) throws Exception {
-        logger.info("消息发送:{}：",JSON.toJSONString(decodeData.getData()));
+        log.info("消息发送:{}：",JSON.toJSONString(decodeData.getData()));
     }
 
 }

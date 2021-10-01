@@ -1,15 +1,15 @@
 package com.hsms.mqserver.strategy;
 
-import com.hsmq.error.HsError;
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
 import com.hsmq.enums.OperationEnum;
+import com.hsmq.error.HsError;
 import com.hsmq.protocol.HsDecodeData;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
-import com.hsms.mqserver.strategy.executors.impl.ConfirmExecutor;
-import com.hsms.mqserver.strategy.executors.impl.SendMessageExecutor;
+import com.hsms.mqserver.strategy.executors.impl.CommitOffsetExecutor;
 import com.hsms.mqserver.strategy.executors.impl.PullExecutor;
+import com.hsms.mqserver.strategy.executors.impl.SendMessageExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class MessageStrategy {
         enumExecutorMap = new HashMap<>();
         enumExecutorMap.put(OperationEnum.SendMessage,new SendMessageExecutor());
         enumExecutorMap.put(OperationEnum.Pull,new PullExecutor());
-        enumExecutorMap.put(OperationEnum.Confirm,new ConfirmExecutor());
+        enumExecutorMap.put(OperationEnum.CommitOffset,new CommitOffsetExecutor());
         System.out.println("init MessageStrategy");
     }
 

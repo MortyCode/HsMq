@@ -1,22 +1,18 @@
 package com.hsmq.consumer;
 
-import com.hsmq.consumer.config.ExecutorService;
 import com.hsmq.consumer.config.RegisteredConsumer;
-import com.hsmq.consumer.executos.ExecutorMessageTask;
-import com.hsmq.consumer.executos.PullMessageTask;
 import com.hsmq.consumer.reactor.ConsumerClient;
 import io.netty.channel.ChannelFuture;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
  * @date ：Created in 2021/6/6 6:25 下午
  */
 public class ClientStartup {
+
+    final static Logger log = LoggerFactory.getLogger(ClientStartup.class);
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -29,7 +25,7 @@ public class ClientStartup {
                         "|  _  | `--. \\______| |   | | |/ _ \\ '_ \\| __|\n" +
                         "| | | |/\\__/ /      | \\__/\\ | |  __/ | | | |_ \n" +
                         "\\_| |_/\\____/        \\____/_|_|\\___|_| |_|\\__|\n";
-        System.out.println(start);
+        log.info(start);
 
         ConsumerClient baseConsumer = new ConsumerClient("127.0.0.1", 9001);
         baseConsumer.start();
@@ -37,6 +33,7 @@ public class ClientStartup {
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
         RegisteredConsumer registeredConsumer = new RegisteredConsumer(channelFuture);
         for (String topic : args) {
+            //注册对应消费者的任务
             registeredConsumer.registeredConsumer(topic);
         }
 

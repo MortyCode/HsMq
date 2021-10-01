@@ -1,7 +1,6 @@
 package com.hsmq.consumer.message;
 
 import com.hsmq.data.message.PullMessage;
-import com.hsmq.data.message.SendMessage;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
@@ -26,6 +25,10 @@ public class ConsumerMessageQueue {
         this.topic = topic;
     }
 
+    /**
+     * 将拉取的消息放入消费队列当中
+     * @param pullMessages
+     */
     public void addMessage(List<PullMessage> pullMessages){
         if (CollectionUtils.isEmpty(pullMessages)){
             return;
@@ -41,10 +44,26 @@ public class ConsumerMessageQueue {
         }
     }
 
-    public PullMessage getMessage(){
-        //获取队列中的消息
 
+
+    public PullMessage getMessage(){
+
+
+
+        //获取队列中的消息
         return null;
+    }
+
+
+
+    public void confirmOffset(PullMessage pullMessage)  {
+
+        Long offset = offSetMap.get(pullMessage.getQueueId());
+
+
+
+
+
     }
 
     public boolean isEmpty(){

@@ -3,7 +3,6 @@ package com.hsmq.data;
 import com.hsmq.enums.OperationEnum;
 
 import java.io.Serializable;
-import java.util.StringJoiner;
 
 /**
  * @author ：河神

@@ -9,6 +9,13 @@ public class TopicConfig {
     private String topicName;
     private int messageQueueSize = 4;
 
+    public static TopicConfig getDefault(String topicName){
+        TopicConfig topicConfig = new TopicConfig();
+        topicConfig.setTopicName(topicName);
+        topicConfig.setMessageQueueSize(4);
+        return topicConfig;
+    }
+
     public String getTopicName() {
         return topicName;
     }

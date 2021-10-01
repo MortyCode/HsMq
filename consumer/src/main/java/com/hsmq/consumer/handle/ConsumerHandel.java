@@ -7,10 +7,8 @@ import com.hsmq.data.message.PullMessage;
 import com.hsmq.protocol.HsDecodeData;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
-
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
@@ -18,7 +16,7 @@ import java.util.List;
  */
 public class ConsumerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
 
-    private static InternalLogger logger = InternalLoggerFactory.getInstance(ConsumerHandel.class);
+    final static Logger log = LoggerFactory.getLogger(ConsumerHandel.class);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData msg) throws Exception {

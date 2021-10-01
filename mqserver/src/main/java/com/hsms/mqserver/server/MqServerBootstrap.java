@@ -3,7 +3,6 @@ package com.hsms.mqserver.server;
 import com.hsms.mqserver.config.ServerConfig;
 import com.hsms.mqserver.data.ConsumerQueueManger;
 import com.hsms.mqserver.reactor.ObjectReactor;
-import com.hsms.mqserver.strategy.MessageStrategy;
 
 /**
  * @author ：河神
@@ -17,19 +16,13 @@ public class MqServerBootstrap {
 
     public void start() {
         //启动注册topic
-        ServerConfig.topicConfigList.forEach((topic,config)->{
-            ConsumerQueueManger.registerTopic(topic);
+        ServerConfig.TopicConfig.forEach((topic,config)->{
+            ConsumerQueueManger.registerTopic(config);
         });
-
         //恢复消费组消费序列
         ConsumerQueueManger.recoveryConsumer();
-        //MQ配置更改命令
-
-
-
-
         //启动服务
-        worker = new Thread(new ObjectReactor(ServerConfig.port));
+        worker = new Thread(new ObjectReactor(ServerConfig.Port));
         worker.start();
     }
 }

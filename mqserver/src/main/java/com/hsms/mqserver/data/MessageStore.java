@@ -1,14 +1,14 @@
 package com.hsms.mqserver.data;
 
 import com.hsmq.data.HsResp;
-import com.hsmq.data.message.SendMessage;
 import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.SendMessage;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -18,14 +18,13 @@ import java.util.List;
  */
 public class MessageStore {
 
-    private final static InternalLogger logger = InternalLoggerFactory.getInstance(MessageStorage.class);
-//    private static ConcurrentHashMap<String,ConcurrentLinkedQueue<Message>> data = new ConcurrentHashMap<>();
+    final static Logger log = LoggerFactory.getLogger(MessageStore.class);
 
     private final MessageStorage messageStorage = new MessageStorage();
 
 
     public List<SendMessage> pullMessage(Pull pull){
-        ConsumerQueue consumerQueue = ConsumerQueueManger.getAndRegister(pull);
+        ConsumerQueue consumerQueue = ConsumerQueueManger.registerConsumer(pull);
         if (consumerQueue==null){
             return null;
         }
@@ -39,12 +38,11 @@ public class MessageStore {
         }
 
         MessageDurability messageDurability = messageStorage.saveMessage(sendMessage);
-        logger.info("saveMessage#messageDurability:{}",messageDurability);
+        log.info("saveMessage#messageDurability:{}",messageDurability);
         boolean push = ConsumerQueueManger.pushConsumerQueue(sendMessage, messageDurability);
         if (!push){
             return HsResp.topicNotExistsError();
         }
-
         HsResp<String> resp = new HsResp<>();
         resp.setData(sendMessage.getMsgId());
         resp.setOperation(OperationEnum.Resp.getOperation());
