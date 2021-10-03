@@ -1,6 +1,7 @@
 package com.hsmq.consumer.reactor;
 
 
+import com.hsmq.consumer.consumer.sub.TopicBConsumer;
 import com.hsmq.consumer.handle.ConsumerHandel;
 import com.hsmq.decode.LengthObjectDecode;
 import com.hsmq.encode.LengthObjectEncode;
@@ -12,12 +13,17 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author: 河神
  * @date:2020-04-18
  */
 public class ConsumerClient {
+
+    final static Logger log = LoggerFactory.getLogger(ConsumerClient.class);
+
 
     private String host;
     private int port;
@@ -29,6 +35,7 @@ public class ConsumerClient {
     }
 
     public void start() throws InterruptedException {
+        log.info("ConsumerClient#start");
         bootstrap = new Bootstrap();
 
         EventLoopGroup eventExecutors = new NioEventLoopGroup();

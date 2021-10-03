@@ -1,5 +1,8 @@
 package com.hsmq.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,6 +14,9 @@ import java.io.ObjectOutputStream;
  * @date ：Created in 2021/6/7 5:40 下午
  */
 public class ObjectByteUtils {
+
+    final static Logger log = LoggerFactory.getLogger(ObjectByteUtils.class);
+
 
 
     /**
@@ -49,7 +55,7 @@ public class ObjectByteUtils {
             ois.close();
             bis.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("ex",ex);
             return null;
         }
         return obj;

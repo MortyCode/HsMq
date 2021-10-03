@@ -1,6 +1,5 @@
 package com.hsmq.consumer.consumer.sub;
 
-import com.hsmq.consumer.ClientStartup;
 import com.hsmq.consumer.consumer.AbstractConsumer;
 import com.hsmq.data.message.PullMessage;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ public class TopicAConsumer extends AbstractConsumer {
     @Override
     protected boolean consumeMessage(PullMessage pullMessage) {
 
-
+        log.info("TopicAConsumer:{}",pullMessage);
         return true;
     }
 }

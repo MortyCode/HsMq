@@ -8,6 +8,8 @@ public class StorageConfig {
 
     public static final String MessagePath = System.getProperty("user.home")+"/data/";
 
+    public static final String Queue = "/queue/";
+
     public static String rootPath = System.getProperty("user.home")+"/hsmq/";
 
     public static final String MessageStorage = rootPath+"storage";

@@ -3,10 +3,15 @@ package com.hsms.mqserver.data;
 import com.hsmq.data.message.Pull;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.TopicConfig;
+import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author ：河神
@@ -15,27 +20,40 @@ import java.util.List;
 public class ConsumerQueue {
 
     private final HashMap<Integer,MessageQueue> messageMappingQueue = new HashMap<>();
-    public volatile   int queueId =  0;
-    public  int queueNum ;
+    public int queueSize ;
 
 
     public ConsumerQueue(TopicConfig topicConfig) {
-        for (int i=0;i<topicConfig.getMessageQueueSize();i++){
-            messageMappingQueue.put(i,new MessageQueue());
+        List<MessageDurability> messageDurabilities = MessageStorage.readMessageDurability(0L, Integer.MAX_VALUE,topicConfig.getTopicName());
+
+        Map<Integer,List<MessageDurability>> collect = new HashMap<>();
+        for (int i=0;i<messageDurabilities.size();i++){
+            int num = i % 4;
+
+            List<MessageDurability> data = collect.get(num);
+            if (data==null){
+                data = new ArrayList<>();
+            }
+            data.add(messageDurabilities.get(i));
+            collect.put(num,data);
         }
-        this.queueNum = topicConfig.getMessageQueueSize();
+
+        for (int i=0;i<topicConfig.getMessageQueueSize();i++){
+            List<MessageDurability> sendMessagesList = collect.get(i);
+            messageMappingQueue.put(i,new MessageQueue(sendMessagesList));
+        }
+        this.queueSize = topicConfig.getMessageQueueSize();
     }
 
     public List<SendMessage> pullMessage(Pull pull){
-        MessageQueue messageQueue = messageMappingQueue.get(pull.getQueueNum());
+        MessageQueue messageQueue = messageMappingQueue.get(pull.getQueueId());
         if (messageQueue==null){
             throw new RuntimeException("messageQueue is not exists");
         }
         return messageQueue.pullMessage(pull);
     }
 
-    public void addMessage(MessageDurability messageDurability){
-        int queueId = getQueueId();
+    public void addMessage(int queueId,MessageDurability messageDurability){
         MessageQueue messageQueue = messageMappingQueue.get(queueId);
         if (messageQueue==null){
             throw new RuntimeException("messageQueue is not exists");
@@ -44,11 +62,8 @@ public class ConsumerQueue {
         messageQueue.addMessage(messageDurability);
     }
 
-    public synchronized int  getQueueId(){
-        queueId++;
-        if (queueId>10000){
-            queueId = 0;
-        }
-        return queueId%queueNum;
+
+    public int getQueueSize() {
+        return queueSize;
     }
 }

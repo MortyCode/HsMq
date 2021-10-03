@@ -1,12 +1,27 @@
 package com.hsmq.consumer.config;
 
+import com.hsmq.consumer.consumer.sub.TopicBConsumer;
 import com.hsmq.consumer.executos.CommitOffsetTask;
 import com.hsmq.consumer.executos.ExecutorMessageTask;
 import com.hsmq.consumer.executos.PullMessageTask;
 import com.hsmq.consumer.message.ConsumerMessageQueue;
+import com.hsmq.data.Head;
+import com.hsmq.data.HsReq;
+import com.hsmq.data.message.MessageQueueData;
+import com.hsmq.data.message.TopicData;
+import com.hsmq.enums.MessageEnum;
+import com.hsmq.enums.OperationEnum;
+import com.hsmq.protocol.HsEecodeData;
 import io.netty.channel.ChannelFuture;
+import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author ：河神
@@ -14,21 +29,92 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class RegisteredConsumer {
 
-    private final ChannelFuture channelFuture;
+    final static Logger log = LoggerFactory.getLogger(RegisteredConsumer.class);
 
-    public RegisteredConsumer(ChannelFuture channelFuture) {
-        this.channelFuture = channelFuture;
+    private static AtomicInteger initFlag = new AtomicInteger(0);
+    private static ChannelFuture channelFuture;
+    private static StopWatch stopWatch;
+    private static Map<String,ConsumerMessageQueue> consumerMessageQueueMap = new HashMap<>();
+
+    public static void setStopWatch(StopWatch stopWatch) {
+        RegisteredConsumer.stopWatch = stopWatch;
+        stopWatch.start();
     }
 
-    public void registeredConsumer(String topic){
+    public static Map<String, ConsumerMessageQueue> getConsumerMessageQueueMap() {
+        return consumerMessageQueueMap;
+    }
+
+    public static ChannelFuture getChannelFuture() {
+        return channelFuture;
+    }
+
+    public static void setChannelFuture(ChannelFuture channelFuture) {
+        RegisteredConsumer.channelFuture = channelFuture;
+    }
+
+    public static void registeredConsumer(String topic){
+        log.info("registeredConsumer topic:[{}]",topic);
         ThreadPoolExecutor executor = ExecutorService.getExecutor();
         //创建消费者
         ConsumerMessageQueue consumerMessageQueue = new ConsumerMessageQueue(topic);
+        //注册到管理器中
+        consumerMessageQueueMap.put(topic,consumerMessageQueue);
         //注册拉取消息任务
         executor.execute(new PullMessageTask(channelFuture , consumerMessageQueue));
+
         //注册执行器任务
         executor.execute(new ExecutorMessageTask(channelFuture ,consumerMessageQueue));
+
         //注册偏移量提交点
         executor.execute(new CommitOffsetTask(channelFuture ,consumerMessageQueue));
+        initFlag.incrementAndGet();
+        log.info("registeredConsumer end consumer size :{} ",initFlag.get());
     }
+
+    public static boolean isInit() {
+        return initFlag.get()<=0;
+    }
+
+    public static void initConsumerQueue(){
+        for (String topic : consumerMessageQueueMap.keySet()) {
+            HsEecodeData hsEecodeData = new HsEecodeData();
+            hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
+            HsReq<TopicData> hsReq = new HsReq<>();
+
+            TopicData topicData = new TopicData();
+            topicData.setTopic(topic);
+            topicData.setConsumerName("AConsumer");
+
+            hsReq.setData(topicData);
+            hsReq.setOperation(OperationEnum.TopicData.getOperation());
+            hsEecodeData.setData(hsReq);
+
+            try {
+                channelFuture.channel().writeAndFlush(hsEecodeData).sync();
+                log.info("consumer init by req server -  topic:{}",topic);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public static void initConsumerQueueHandle(MessageQueueData messageQueueData){
+        ConsumerMessageQueue consumerMessageQueue = consumerMessageQueueMap.get(messageQueueData.getTopic());
+        if (consumerMessageQueue==null){
+            return;
+        }
+        //初始化消费者
+        consumerMessageQueue.initQueue(messageQueueData);
+        //设置初始化完成
+        initFlag.decrementAndGet();
+
+        if (isInit()){
+            stopWatch.stop();
+            log.info("Consumer Start End");
+        }
+
+    }
+
 }

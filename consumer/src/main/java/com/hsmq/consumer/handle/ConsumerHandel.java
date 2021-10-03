@@ -1,9 +1,10 @@
 package com.hsmq.consumer.handle;
 
+import com.hsmq.consumer.config.RegisteredConsumer;
 import com.hsmq.consumer.message.ConsumerMessageQueue;
-import com.hsmq.consumer.message.ConsumerMessageQueueManger;
 import com.hsmq.data.HsResp;
-import com.hsmq.data.message.PullMessage;
+import com.hsmq.data.message.MessageQueueData;
+import com.hsmq.data.message.PullMessageResp;
 import com.hsmq.protocol.HsDecodeData;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,16 +21,21 @@ public class ConsumerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData msg) throws Exception {
-        HsResp data = (HsResp) msg.getData();
-        if (data.getDatas()!=null&&data.getDatas().size()>0){
-            Object o = data.getDatas().get(0);
-            if (o instanceof PullMessage){
-                PullMessage pullMessage = (PullMessage) o;
-                ConsumerMessageQueue queue = ConsumerMessageQueueManger.getQueue(pullMessage.getTopic());
-                queue.addMessage(data.getDatas());
+        HsResp<?> data = (HsResp<?>) msg.getData();
+        if (data.getData()!=null){
+            if (data.getData() instanceof PullMessageResp){
+                PullMessageResp pullMessageResp = (PullMessageResp) data.getData();
+                ConsumerMessageQueue queue = RegisteredConsumer.getConsumerMessageQueueMap().get(pullMessageResp.getTopic());
+                if (queue!=null){
+                    queue.addMessage(pullMessageResp);
+                }else{
+                    log.info("not search topic queue:{}",pullMessageResp.getTopic());
+                }
+            }
+            if (data.getData() instanceof MessageQueueData){
+                RegisteredConsumer.initConsumerQueueHandle((MessageQueueData)data.getData());
             }
         }
-
     }
 
 }

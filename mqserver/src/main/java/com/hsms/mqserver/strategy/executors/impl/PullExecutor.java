@@ -3,11 +3,14 @@ package com.hsms.mqserver.strategy.executors.impl;
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
 import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.PullMessage;
+import com.hsmq.data.message.PullMessageResp;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +25,33 @@ public class PullExecutor extends BaseExecutor<Pull> {
         Pull pull = hsReq.getData();
         List<SendMessage> sendMessages = messageStore.pullMessage(pull);
 
-        HsResp<SendMessage> resp = new HsResp<>();
-        resp.setDatas(sendMessages);
+
+        List<PullMessage> pullMessages = new ArrayList<>();
+        if (sendMessages!=null){
+            for (SendMessage sendMessage : sendMessages) {
+                PullMessage pullMessage = new PullMessage();
+                pullMessage.setMsgId(sendMessage.getMsgId());
+                pullMessage.setBody(sendMessage.getBody());
+                pullMessage.setKey(sendMessage.getKey());
+                pullMessage.setTopic(sendMessage.getTopic());
+                pullMessage.setTag(sendMessage.getTag());
+//            pullMessage.setOffset();
+
+                pullMessages.add(pullMessage);
+            }
+        }
+
+
+        PullMessageResp pullMessageResp = new PullMessageResp();
+        pullMessageResp.setPullMessages(pullMessages);
+//        pullMessageResp.setLastOffset();
+
+        pullMessageResp.setTopic(pull.getTopic());
+        pullMessageResp.setQueueId(pull.getQueueId());
+
+
+        HsResp<PullMessageResp> resp = new HsResp<>();
+        resp.setData(pullMessageResp);
         resp.setOperation(OperationEnum.Resp.getOperation());
         resp.setResult(ResultEnum.SendOK.getCode());
         return resp;

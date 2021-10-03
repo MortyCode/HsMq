@@ -15,8 +15,7 @@ public class TopicBConsumer extends AbstractConsumer {
 
     @Override
     protected boolean consumeMessage(PullMessage pullMessage) {
-
-
+        log.info("TopicBConsumer:{}",pullMessage);
         return true;
     }
 }

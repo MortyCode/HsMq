@@ -21,6 +21,13 @@ public class MessageQueue {
         this.messageQueue = new ConcurrentLinkedQueue<>();
     }
 
+    public MessageQueue(List<MessageDurability> data) {
+        this.messageQueue = new ConcurrentLinkedQueue<>();
+        if (data!=null&&data.size()>0){
+            this.messageQueue.addAll(data);
+        }
+    }
+
     public List<SendMessage> pullMessage(Pull pull){
         int size = pull.getSize();
         List<MessageDurability> data = new ArrayList<>();

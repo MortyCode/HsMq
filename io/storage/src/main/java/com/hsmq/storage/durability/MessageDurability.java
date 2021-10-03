@@ -1,18 +1,30 @@
 package com.hsmq.storage.durability;
 
+import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
  * @author ：河神
  * @date ：Created in 2021/6/11 4:14 下午
  */
-public class MessageDurability {
+public class MessageDurability implements Serializable {
 
+
+    private static final long serialVersionUID = -7827672105039234315L;
     private long offset;
 
     private int length;
 
-    private String tags;
+    private int tagHashcode;
+
+    public MessageDurability() {
+    }
+
+    public MessageDurability(long offset, int length, int tagHashcode) {
+        this.offset = offset;
+        this.length = length;
+        this.tagHashcode = tagHashcode;
+    }
 
     public long getOffset() {
         return offset;
@@ -30,12 +42,12 @@ public class MessageDurability {
         this.length = length;
     }
 
-    public String getTags() {
-        return tags;
+    public int getTagHashcode() {
+        return tagHashcode;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setTagHashcode(int tagHashcode) {
+        this.tagHashcode = tagHashcode;
     }
 
     @Override
@@ -43,7 +55,7 @@ public class MessageDurability {
         return new StringJoiner(", ", MessageDurability.class.getSimpleName() + "[", "]")
                 .add("offset=" + offset)
                 .add("length=" + length)
-                .add("tags='" + tags + "'")
+                .add("tagHashcode=" + tagHashcode)
                 .toString();
     }
 }

@@ -11,27 +11,14 @@ public class PullMessage implements Serializable {
 
     private static final long serialVersionUID = -20210610L;
 
-
     private String msgId;
     private String topic;
     private String tag;
     private String key;
     private String body;
     private Long offset;
-    private Integer queueId;
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", PullMessage.class.getSimpleName() + "[", "]")
-                .add("msgId='" + msgId + "'")
-                .add("topic='" + topic + "'")
-                .add("tag='" + tag + "'")
-                .add("key='" + key + "'")
-                .add("body='" + body + "'")
-                .add("offset=" + offset)
-                .add("queueId=" + queueId)
-                .toString();
-    }
+
 
     public String getMsgId() {
         return msgId;
@@ -73,19 +60,23 @@ public class PullMessage implements Serializable {
         this.body = body;
     }
 
-    public Integer getQueueId() {
-        return queueId;
-    }
-
-    public void setQueueId(Integer queueId) {
-        this.queueId = queueId;
-    }
-
     public Long getOffset() {
         return offset;
     }
 
     public void setOffset(Long offset) {
         this.offset = offset;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", PullMessage.class.getSimpleName() + "[", "]")
+                .add("msgId='" + msgId + "'")
+                .add("topic='" + topic + "'")
+                .add("tag='" + tag + "'")
+                .add("key='" + key + "'")
+                .add("body='" + body + "'")
+                .add("offset=" + offset)
+                .toString();
     }
 }

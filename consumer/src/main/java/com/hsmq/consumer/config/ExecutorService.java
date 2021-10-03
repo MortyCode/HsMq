@@ -15,7 +15,7 @@ public class ExecutorService {
    public static ThreadPoolExecutor threadPoolExecutor;
 
    static {
-       threadPoolExecutor = new ThreadPoolExecutor(10, 10,
+       threadPoolExecutor = new ThreadPoolExecutor(20, 100,
                30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(5), new ThreadFactory() {
            @Override
            public Thread newThread(Runnable r) {

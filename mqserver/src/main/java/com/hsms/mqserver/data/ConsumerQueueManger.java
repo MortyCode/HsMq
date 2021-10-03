@@ -3,8 +3,10 @@ package com.hsms.mqserver.data;
 import com.hsmq.data.message.Pull;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.TopicConfig;
+import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -26,19 +28,22 @@ public class ConsumerQueueManger {
         });
     }
 
+    public static TopicListener getTopicListener(String topic){
+        return DATA.get(topic);
+    }
 
     public static ConsumerQueue registerConsumer(Pull pull){
-        TopicListener topicListener = DATA.get(pull.getTopic());
+        TopicListener topicListener = getTopicListener(pull.getTopic());
         return topicListener.getConsumerQueue(pull.getConsumerName());
     }
 
 
     public static boolean existsTopic(SendMessage sendMessage){
-        return DATA.get(sendMessage.getTopic())!=null;
+        return getTopicListener(sendMessage.getTopic())!=null;
     }
 
     public static boolean pushConsumerQueue(SendMessage sendMessage, MessageDurability messageDurability){
-        TopicListener topicListener = DATA.get(sendMessage.getTopic());
+        TopicListener topicListener = getTopicListener(sendMessage.getTopic());
         return topicListener.addMsg2Queue(sendMessage,messageDurability);
     }
 

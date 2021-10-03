@@ -1,8 +1,10 @@
 package com.hsmq.consumer;
 
 import com.hsmq.consumer.config.RegisteredConsumer;
+import com.hsmq.consumer.consumer.ConsumerHandlerManger;
 import com.hsmq.consumer.reactor.ConsumerClient;
 import io.netty.channel.ChannelFuture;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,18 +28,21 @@ public class ClientStartup {
                         "| | | |/\\__/ /      | \\__/\\ | |  __/ | | | |_ \n" +
                         "\\_| |_/\\____/        \\____/_|_|\\___|_| |_|\\__|\n";
         log.info(start);
+        RegisteredConsumer.setStopWatch(new StopWatch());
 
         ConsumerClient baseConsumer = new ConsumerClient("127.0.0.1", 9001);
         baseConsumer.start();
 
+        //初始化消费者
+        ConsumerHandlerManger.initConsumer();
+        //初始化任务
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
-        RegisteredConsumer registeredConsumer = new RegisteredConsumer(channelFuture);
+        RegisteredConsumer.setChannelFuture(channelFuture);
         for (String topic : args) {
             //注册对应消费者的任务
-            registeredConsumer.registeredConsumer(topic);
+            RegisteredConsumer.registeredConsumer(topic);
         }
-
-
+        RegisteredConsumer.initConsumerQueue();
     }
 
 }

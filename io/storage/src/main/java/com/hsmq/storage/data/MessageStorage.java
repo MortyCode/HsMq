@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 持久化消息
@@ -28,9 +30,8 @@ public class MessageStorage {
     public static MessageDurability saveMessage(SendMessage sendMessage){
         try {
             synchronized (MessageStorage.class){
-                MessageDurability durability = FileOperation.save(StorageConfig.MessagePath + "mq_1", sendMessage);
-                durability.setTags(sendMessage.getTag());
-                return durability;
+                MessageDurability messageDurability = FileOperation.save(StorageConfig.MessagePath + "mq_1", sendMessage);
+                return messageDurability;
             }
         } catch (IOException | InterruptedException e) {
             log.error("save filer error",e);
@@ -38,23 +39,12 @@ public class MessageStorage {
         return null;
     }
 
-    public static  SendMessage readMessage(MessageDurability messageDurability){
-        try {
-            byte[] read = FileOperation.read(StorageConfig.MessagePath + "mq_1", messageDurability.getOffset());
-            Object object = ObjectByteUtils.toObject(read);
-
-            if (object instanceof SendMessage){
-                return (SendMessage)object;
-            }
-            return null;
-        } catch (IOException | InterruptedException e) {
-            log.error("read filer error",e);
-        }
-        return null;
-    }
-
     public static List<SendMessage> readMessages(List<MessageDurability> messageDurabilitys){
         return FileOperation.readMessages(StorageConfig.MessagePath + "mq_1",messageDurabilitys);
+    }
+
+    public static List<MessageDurability> readMessageDurability(long offset,int size,String topic){
+        return FileOperation.readMessageDurability(StorageConfig.MessagePath + "mq_1",offset,size,topic);
     }
 
 

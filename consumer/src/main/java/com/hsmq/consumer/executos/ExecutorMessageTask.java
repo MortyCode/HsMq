@@ -1,9 +1,15 @@
 package com.hsmq.consumer.executos;
 
+import com.hsmq.consumer.config.ExecutorService;
 import com.hsmq.consumer.consumer.ConsumerHandlerManger;
 import com.hsmq.consumer.message.ConsumerMessageQueue;
 import com.hsmq.data.message.PullMessage;
 import io.netty.channel.ChannelFuture;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author ：河神
@@ -25,16 +31,19 @@ public class ExecutorMessageTask implements Runnable{
 
     @Override
     public void run() {
-        while (true){
-            PullMessage pullMessage = consumerMessageQueue.getMessage();
-            if (pullMessage !=null){
-                boolean consumer = ConsumerHandlerManger.consumer(pullMessage);
-                if (consumer){
-                    System.out.println("消费消息"+ pullMessage);
-                    consumerMessageQueue.confirmOffset(pullMessage);
+        ThreadPoolExecutor executor = ExecutorService.getExecutor();
+        do {
+            Map<Integer, ConcurrentLinkedQueue<PullMessage>> queueMap = consumerMessageQueue.getQueueMap();
+            queueMap.forEach((queueId,queue)->{
+                PullMessage pullMessage = queue.poll();
+                if (pullMessage != null) {
+                    boolean consumer = ConsumerHandlerManger.consumer(pullMessage);
+                    if (consumer) {
+                        consumerMessageQueue.confirmOffset(queueId,pullMessage);
+                    }
                 }
-            }
-        }
+            });
+        } while (!Thread.interrupted());
     }
 
 

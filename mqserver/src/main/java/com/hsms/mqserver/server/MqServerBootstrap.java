@@ -12,8 +12,6 @@ public class MqServerBootstrap {
 
     public Thread worker;
 
-
-
     public void start() {
         //启动注册topic
         ServerConfig.TopicConfig.forEach((topic,config)->{

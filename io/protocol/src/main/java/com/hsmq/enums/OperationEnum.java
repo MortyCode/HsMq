@@ -19,6 +19,11 @@ public enum  OperationEnum {
     Pull("Pull", Pull.class),
 
     /**
+     * 拉取消息
+     */
+    TopicData("TopicData", Pull.class),
+
+    /**
      * 同步确认消息消费位点
      */
     CommitOffset("CommitOffset", com.hsmq.data.message.SendMessage.class),
@@ -27,6 +32,8 @@ public enum  OperationEnum {
      * 请求返回resp
      */
     Resp("Resp", null),
+
+
 
     ;
 

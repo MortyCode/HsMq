@@ -18,8 +18,10 @@ public class ConsumerHandlerManger {
     final static Logger log = LoggerFactory.getLogger(TopicBConsumer.class);
 
     public static void initConsumer(){
+        log.info("initConsumer start");
         consumerMap.put("TopicA",new TopicAConsumer());
         consumerMap.put("TopicB",new TopicBConsumer());
+        log.info("initConsumer end");
     }
 
     public static boolean consumer(PullMessage pullMessage){

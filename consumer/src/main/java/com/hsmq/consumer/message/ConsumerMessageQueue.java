@@ -1,6 +1,8 @@
 package com.hsmq.consumer.message;
 
+import com.hsmq.data.message.MessageQueueData;
 import com.hsmq.data.message.PullMessage;
+import com.hsmq.data.message.PullMessageResp;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
@@ -19,55 +21,45 @@ public class ConsumerMessageQueue {
 
     private final Map<Integer,Long> offSetMap = new ConcurrentHashMap<>();
 
+    private final Map<Integer,Long> lastMessageMap = new ConcurrentHashMap<>();
+
     private final String topic;
 
     public ConsumerMessageQueue(String topic ) {
         this.topic = topic;
     }
 
+    public void initQueue(MessageQueueData messageQueueData){
+        Integer queueSize = messageQueueData.getQueueSize();
+        for (int i=0;i<queueSize;i++){
+            queueMap.put(i,new ConcurrentLinkedQueue<>());
+        }
+        Map<Integer, Long> serverOffSetMap = messageQueueData.getOffSetMap();
+        if (serverOffSetMap!=null&&serverOffSetMap.size()>0){
+            offSetMap.putAll(serverOffSetMap);
+        }
+    }
+
     /**
      * 将拉取的消息放入消费队列当中
-     * @param pullMessages
      */
-    public void addMessage(List<PullMessage> pullMessages){
-        if (CollectionUtils.isEmpty(pullMessages)){
+    public void addMessage(PullMessageResp pullMessageResp){
+        if (CollectionUtils.isEmpty(pullMessageResp.getPullMessages())){
             return;
         }
-        for (PullMessage pullMessage : pullMessages) {
-            Integer queueId = pullMessage.getQueueId();
-            ConcurrentLinkedQueue<PullMessage> queue ;
-            if ((queue=queueMap.get(queueId))==null){
-                queue = new ConcurrentLinkedQueue<>();
-                queueMap.put(queueId,queue);
-            }
-            queue.add(pullMessage);
+        ConcurrentLinkedQueue<PullMessage> concurrentLinkedQueue = queueMap.get(pullMessageResp.getQueueId());
+        if (concurrentLinkedQueue==null){
+            return;
         }
+        concurrentLinkedQueue.addAll(pullMessageResp.getPullMessages());
     }
 
-
-
-    public PullMessage getMessage(){
-
-
-
-        //获取队列中的消息
-        return null;
+    public Map<Integer, ConcurrentLinkedQueue<PullMessage>> getQueueMap() {
+        return queueMap;
     }
 
-
-
-    public void confirmOffset(PullMessage pullMessage)  {
-
-        Long offset = offSetMap.get(pullMessage.getQueueId());
-
-
-
-
-
-    }
-
-    public boolean isEmpty(){
-        return false;
+    public void confirmOffset(Integer queueId,PullMessage pullMessage)  {
+        offSetMap.put(queueId,pullMessage.getOffset());
     }
 
     public String getTopic() {
