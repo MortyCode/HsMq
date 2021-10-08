@@ -62,6 +62,14 @@ public class ConsumerMessageQueue {
         offSetMap.put(queueId,pullMessage.getOffset());
     }
 
+    public Map<Integer, Long> getOffSetMap() {
+        return offSetMap;
+    }
+
+    public Map<Integer, Long> getLastMessageMap() {
+        return lastMessageMap;
+    }
+
     public String getTopic() {
         return topic;
     }

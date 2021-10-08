@@ -35,7 +35,7 @@ public class PullExecutor extends BaseExecutor<Pull> {
                 pullMessage.setKey(sendMessage.getKey());
                 pullMessage.setTopic(sendMessage.getTopic());
                 pullMessage.setTag(sendMessage.getTag());
-//            pullMessage.setOffset();
+                pullMessage.setOffset(sendMessage.getOffset());
 
                 pullMessages.add(pullMessage);
             }

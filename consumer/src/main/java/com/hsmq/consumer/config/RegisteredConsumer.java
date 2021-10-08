@@ -67,7 +67,13 @@ public class RegisteredConsumer {
         executor.execute(new ExecutorMessageTask(channelFuture ,consumerMessageQueue));
 
         //注册偏移量提交点
-        executor.execute(new CommitOffsetTask(channelFuture ,consumerMessageQueue));
+//        executor.execute(new CommitOffsetTask(channelFuture ,consumerMessageQueue));
+        //定时任务
+        channelFuture.channel().eventLoop().scheduleWithFixedDelay(()->{
+            //定时任务
+            new Thread(new CommitOffsetTask(channelFuture,consumerMessageQueue)).start();
+        },1, 3L, TimeUnit.SECONDS);
+
         initFlag.incrementAndGet();
         log.info("registeredConsumer end consumer size :{} ",initFlag.get());
     }

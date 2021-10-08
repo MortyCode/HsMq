@@ -14,6 +14,7 @@ public class Pull implements Serializable {
     private int queueId;
     private String topic;
     private int size;
+    private long offset;
     private String tags;
 
     public String getTopic() {
@@ -54,5 +55,13 @@ public class Pull implements Serializable {
 
     public void setQueueId(int queueId) {
         this.queueId = queueId;
+    }
+
+    public long getOffset() {
+        return offset;
+    }
+
+    public void setOffset(long offset) {
+        this.offset = offset;
     }
 }

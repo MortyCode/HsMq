@@ -2,6 +2,7 @@ package com.hsms.mqserver.data;
 
 import com.hsmq.data.message.Pull;
 import com.hsmq.data.message.SendMessage;
+import com.hsmq.storage.data.MessageDurabilityStorage;
 import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
 
@@ -17,9 +18,6 @@ public class MessageQueue {
 
     private final ConcurrentLinkedQueue<MessageDurability> messageQueue;
 
-    public MessageQueue() {
-        this.messageQueue = new ConcurrentLinkedQueue<>();
-    }
 
     public MessageQueue(List<MessageDurability> data) {
         this.messageQueue = new ConcurrentLinkedQueue<>();
@@ -38,6 +36,9 @@ public class MessageQueue {
             }
             data.add(messageDurability);
         }
+
+        MessageDurabilityStorage.readMessageQueue(pull.getQueueId(),pull.getTopic(),pull.getOffset());
+
         if (data.size()==0){
             return null;
         }

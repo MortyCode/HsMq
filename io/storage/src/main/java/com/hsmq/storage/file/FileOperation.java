@@ -127,7 +127,9 @@ public class FileOperation {
                     continue;
                 }
                 if (object instanceof SendMessage){
-                    data.add((SendMessage)object);
+                    SendMessage sendMessage = (SendMessage) object;
+                    sendMessage.setOffset(durability.getOffset());
+                    data.add(sendMessage);
                 }
             }
             return data;

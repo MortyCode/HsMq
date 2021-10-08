@@ -2,11 +2,14 @@ package com.hsmq.consumer;
 
 import com.hsmq.consumer.config.RegisteredConsumer;
 import com.hsmq.consumer.consumer.ConsumerHandlerManger;
+import com.hsmq.consumer.executos.ExecutorMessageTask;
 import com.hsmq.consumer.reactor.ConsumerClient;
 import io.netty.channel.ChannelFuture;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author ：河神
@@ -37,6 +40,7 @@ public class ClientStartup {
         ConsumerHandlerManger.initConsumer();
         //初始化任务
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
+
         RegisteredConsumer.setChannelFuture(channelFuture);
         for (String topic : args) {
             //注册对应消费者的任务
