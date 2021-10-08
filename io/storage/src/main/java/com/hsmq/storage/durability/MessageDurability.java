@@ -17,6 +17,8 @@ public class MessageDurability implements Serializable {
 
     private int tagHashcode;
 
+    private long index;
+
     public MessageDurability() {
     }
 
@@ -50,12 +52,21 @@ public class MessageDurability implements Serializable {
         this.tagHashcode = tagHashcode;
     }
 
+    public long getIndex() {
+        return index;
+    }
+
+    public void setIndex(long index) {
+        this.index = index;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", MessageDurability.class.getSimpleName() + "[", "]")
                 .add("offset=" + offset)
                 .add("length=" + length)
                 .add("tagHashcode=" + tagHashcode)
+                .add("index=" + index)
                 .toString();
     }
 }

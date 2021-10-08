@@ -23,6 +23,8 @@ public class FileOperation {
 
     final static Logger log = LoggerFactory.getLogger(FileOperation.class);
 
+    private static final int MessageDurabilityLength = 20;
+
     public static void save(String fileName,List<MessageDurability> data) throws IOException {
         if (data==null||data.size()==0){
             return;
@@ -30,7 +32,7 @@ public class FileOperation {
 
         RandomAccessFile rws = new RandomAccessFile(fileName, "rw");
         FileChannel fileChannel = rws.getChannel();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(data.size()* 16);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(data.size()* MessageDurabilityLength);
 
         for (MessageDurability messageDurability : data) {
             byte[] bytes = ObjectByteUtils.toByteArray(messageDurability);
@@ -40,6 +42,7 @@ public class FileOperation {
             byteBuffer.putLong(messageDurability.getOffset());
             byteBuffer.putInt(messageDurability.getLength());
             byteBuffer.putInt(messageDurability.getTagHashcode());
+            byteBuffer.putLong(fileChannel.size()/MessageDurabilityLength);
         }
 
         byteBuffer.flip();
@@ -55,11 +58,11 @@ public class FileOperation {
         List<MessageDurability> data = new ArrayList<>();
 
         RandomAccessFile rws = new RandomAccessFile(fileName, "rw");
-        long offset = index * 16;
+        long offset = index * MessageDurabilityLength;
 
         FileChannel fileChannel = rws.getChannel();
         while (true){
-            ByteBuffer byteBuffer = ByteBuffer.allocate(16);
+            ByteBuffer byteBuffer = ByteBuffer.allocate(MessageDurabilityLength);
             int read = fileChannel.read(byteBuffer, offset);
             if (read<=0){
                 break;
@@ -70,7 +73,7 @@ public class FileOperation {
             messageDurability.setLength(byteBuffer.getInt());
             messageDurability.setTagHashcode(byteBuffer.getInt());
 
-            offset+=16;
+            offset+=MessageDurabilityLength;
 
             data.add(messageDurability);
         }
