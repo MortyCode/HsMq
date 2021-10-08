@@ -11,7 +11,9 @@ import com.hsmq.enums.ResultEnum;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author ：河神
@@ -23,32 +25,17 @@ public class PullExecutor extends BaseExecutor<Pull> {
     public HsResp<?> executor(HsReq<Pull> hsReq) {
 
         Pull pull = hsReq.getData();
-        List<SendMessage> sendMessages = messageStore.pullMessage(pull);
 
+        List<PullMessage> pullMessages = messageStore.pullMessage(pull);
 
-        List<PullMessage> pullMessages = new ArrayList<>();
-        if (sendMessages!=null){
-            for (SendMessage sendMessage : sendMessages) {
-                PullMessage pullMessage = new PullMessage();
-                pullMessage.setMsgId(sendMessage.getMsgId());
-                pullMessage.setBody(sendMessage.getBody());
-                pullMessage.setKey(sendMessage.getKey());
-                pullMessage.setTopic(sendMessage.getTopic());
-                pullMessage.setTag(sendMessage.getTag());
-                pullMessage.setOffset(sendMessage.getOffset());
-
-                pullMessages.add(pullMessage);
-            }
-        }
+        Optional<Long> first = pullMessages.stream().map(PullMessage::getIndex).max(Comparator.comparing(Long::longValue));
 
 
         PullMessageResp pullMessageResp = new PullMessageResp();
         pullMessageResp.setPullMessages(pullMessages);
-//        pullMessageResp.setLastOffset();
-
         pullMessageResp.setTopic(pull.getTopic());
         pullMessageResp.setQueueId(pull.getQueueId());
-
+        first.ifPresent(pullMessageResp::setLastIndex);
 
         HsResp<PullMessageResp> resp = new HsResp<>();
         resp.setData(pullMessageResp);

@@ -1,6 +1,7 @@
 package com.hsms.mqserver.data;
 
 import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.TopicConfig;
 import com.hsmq.storage.data.MessageStorage;
@@ -45,7 +46,7 @@ public class ConsumerQueue {
         this.queueSize = topicConfig.getMessageQueueSize();
     }
 
-    public List<SendMessage> pullMessage(Pull pull){
+    public List<PullMessage> pullMessage(Pull pull){
         MessageQueue messageQueue = messageMappingQueue.get(pull.getQueueId());
         if (messageQueue==null){
             throw new RuntimeException("messageQueue is not exists");

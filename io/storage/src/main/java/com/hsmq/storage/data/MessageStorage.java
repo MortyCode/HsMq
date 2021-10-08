@@ -1,5 +1,6 @@
 package com.hsmq.storage.data;
 
+import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.StorageConfig;
 import com.hsmq.storage.durability.MessageDurability;
@@ -39,7 +40,7 @@ public class MessageStorage {
         return null;
     }
 
-    public static List<SendMessage> readMessages(List<MessageDurability> messageDurabilitys){
+    public static List<PullMessage> readMessages(List<MessageDurability> messageDurabilitys){
         return FileOperation.readMessages(StorageConfig.MessagePath + "mq_1",messageDurabilitys);
     }
 

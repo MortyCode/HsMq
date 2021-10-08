@@ -2,6 +2,7 @@ package com.hsms.mqserver.data;
 
 import com.hsmq.data.HsResp;
 import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
@@ -23,7 +24,7 @@ public class MessageStore {
     private final MessageStorage messageStorage = new MessageStorage();
 
 
-    public List<SendMessage> pullMessage(Pull pull){
+    public List<PullMessage> pullMessage(Pull pull){
         ConsumerQueue consumerQueue = ConsumerQueueManger.registerConsumer(pull);
         if (consumerQueue==null){
             return null;

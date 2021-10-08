@@ -1,6 +1,7 @@
 package com.hsmq.storage.file;
 
 import com.hsmq.common.exception.FileException;
+import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.utils.ObjectByteUtils;
@@ -25,7 +26,7 @@ public class FileOperation {
 
     private static final int MessageDurabilityLength = 20;
 
-    public static void save(String fileName,List<MessageDurability> data) throws IOException {
+    public static  void save(String fileName,List<MessageDurability> data) throws IOException {
         if (data==null||data.size()==0){
             return;
         }
@@ -39,10 +40,12 @@ public class FileOperation {
             if (bytes==null){
                 throw new FileException("文件转化异常：object not can cast bytes");
             }
+            messageDurability.setIndex(fileChannel.size()/MessageDurabilityLength);
+
             byteBuffer.putLong(messageDurability.getOffset());
             byteBuffer.putInt(messageDurability.getLength());
             byteBuffer.putInt(messageDurability.getTagHashcode());
-            byteBuffer.putLong(fileChannel.size()/MessageDurabilityLength);
+            byteBuffer.putLong(messageDurability.getIndex());
         }
 
         byteBuffer.flip();
@@ -72,6 +75,7 @@ public class FileOperation {
             messageDurability.setOffset(byteBuffer.getLong());
             messageDurability.setLength(byteBuffer.getInt());
             messageDurability.setTagHashcode(byteBuffer.getInt());
+            messageDurability.setIndex(byteBuffer.getLong());
 
             offset+=MessageDurabilityLength;
 
@@ -82,7 +86,7 @@ public class FileOperation {
 
 
 
-    public static MessageDurability save(String fileName,Object object) throws IOException, InterruptedException{
+    public static synchronized MessageDurability save(String fileName,Object object) throws IOException, InterruptedException{
 
         RandomAccessFile rws = new RandomAccessFile(fileName, "rw");
         FileChannel fileChannel = rws.getChannel();
@@ -118,8 +122,8 @@ public class FileOperation {
         return bytes;
     }
 
-    public static List<SendMessage> readMessages(String fileName, List<MessageDurability> messageDurability){
-        List<SendMessage> data = new ArrayList<>();
+    public static List<PullMessage> readMessages(String fileName, List<MessageDurability> messageDurability){
+        List<PullMessage> data = new ArrayList<>();
         try {
             FileChannel fileChannel =
                     new RandomAccessFile(fileName, "r").getChannel();
@@ -131,8 +135,14 @@ public class FileOperation {
                 }
                 if (object instanceof SendMessage){
                     SendMessage sendMessage = (SendMessage) object;
-                    sendMessage.setOffset(durability.getOffset());
-                    data.add(sendMessage);
+                    PullMessage pullMessage = new PullMessage();
+                    pullMessage.setMsgId(sendMessage.getMsgId());
+                    pullMessage.setBody(sendMessage.getBody());
+                    pullMessage.setKey(sendMessage.getKey());
+                    pullMessage.setTopic(sendMessage.getTopic());
+                    pullMessage.setTag(sendMessage.getTag());
+                    pullMessage.setIndex(durability.getIndex());
+                    data.add(pullMessage);
                 }
             }
             return data;

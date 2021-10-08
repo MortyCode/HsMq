@@ -17,7 +17,6 @@ public class SendMessage implements Serializable {
     private String tag;
     private String key;
     private String body;
-    private Long offset;
 
 
     public String getMsgId() {
@@ -60,14 +59,6 @@ public class SendMessage implements Serializable {
         this.body = body;
     }
 
-    public Long getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Long offset) {
-        this.offset = offset;
-    }
-
     @Override
     public String toString() {
         return new StringJoiner(", ", SendMessage.class.getSimpleName() + "[", "]")
@@ -76,7 +67,6 @@ public class SendMessage implements Serializable {
                 .add("tag='" + tag + "'")
                 .add("key='" + key + "'")
                 .add("body='" + body + "'")
-                .add("offset=" + offset)
                 .toString();
     }
 }

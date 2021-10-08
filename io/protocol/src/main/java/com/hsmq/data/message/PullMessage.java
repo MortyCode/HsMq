@@ -16,7 +16,7 @@ public class PullMessage implements Serializable {
     private String tag;
     private String key;
     private String body;
-    private Long offset;
+    private Long index;
 
 
 
@@ -60,14 +60,6 @@ public class PullMessage implements Serializable {
         this.body = body;
     }
 
-    public Long getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Long offset) {
-        this.offset = offset;
-    }
-
     @Override
     public String toString() {
         return new StringJoiner(", ", PullMessage.class.getSimpleName() + "[", "]")
@@ -76,7 +68,16 @@ public class PullMessage implements Serializable {
                 .add("tag='" + tag + "'")
                 .add("key='" + key + "'")
                 .add("body='" + body + "'")
-                .add("offset=" + offset)
+                .add("index=" + index)
                 .toString();
     }
+
+    public Long getIndex() {
+        return index;
+    }
+
+    public void setIndex(Long index) {
+        this.index = index;
+    }
+
 }

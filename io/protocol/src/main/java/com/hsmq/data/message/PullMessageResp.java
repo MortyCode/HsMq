@@ -16,7 +16,7 @@ public class PullMessageResp implements Serializable {
 
     private Integer queueId;
 
-    private Long lastOffset;
+    private Long lastIndex;
 
     public List<PullMessage> getPullMessages() {
         return pullMessages;
@@ -42,11 +42,11 @@ public class PullMessageResp implements Serializable {
         this.queueId = queueId;
     }
 
-    public Long getLastOffset() {
-        return lastOffset;
+    public Long getLastIndex() {
+        return lastIndex;
     }
 
-    public void setLastOffset(Long lastOffset) {
-        this.lastOffset = lastOffset;
+    public void setLastIndex(Long lastIndex) {
+        this.lastIndex = lastIndex;
     }
 }

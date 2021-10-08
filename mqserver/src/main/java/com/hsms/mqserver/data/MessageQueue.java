@@ -1,6 +1,7 @@
 package com.hsms.mqserver.data;
 
 import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.data.MessageDurabilityStorage;
 import com.hsmq.storage.data.MessageStorage;
@@ -26,7 +27,7 @@ public class MessageQueue {
         }
     }
 
-    public List<SendMessage> pullMessage(Pull pull){
+    public List<PullMessage> pullMessage(Pull pull){
         int size = pull.getSize();
         List<MessageDurability> data = new ArrayList<>();
         for(int i=0;i<size;size++){
