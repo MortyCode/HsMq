@@ -13,6 +13,7 @@
         <module>io</module>
         <module>mqserver</module>
         <module>common</module>
+        <module>mq-client</module>
     </modules>
     <packaging>pom</packaging>
 
