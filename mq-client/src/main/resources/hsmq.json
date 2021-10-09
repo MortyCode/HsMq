@@ -1,0 +1,17 @@
+{
+  "$schema": "check/hsmq_schema.json",
+  "consumer": {
+    "consumerB": [
+      {
+        "topic":"TopicA"
+      },
+      {
+        "topic":"TopicB"
+      }
+    ]
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "post": 9001
+  }
+}

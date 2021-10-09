@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "required":["consumer","server"],
+  "properties": {
+    "consumer": {
+      "type": "object"
+    },
+    "server": {
+      "type": "object"
+    }
+  }
+}

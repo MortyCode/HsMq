@@ -16,7 +16,7 @@ public class TopicAConsumer extends AbstractConsumer {
     @Override
     protected boolean consumeMessage(PullMessage pullMessage) {
 
-        log.info("TopicAConsumer:{}",pullMessage);
+        log.info("TopicAConsumer 消费:{}",pullMessage);
         return true;
     }
 }
