@@ -59,7 +59,7 @@ public class PullMessageTask implements Runnable{
         HsEecodeData hsEecodeData = new HsEecodeData();
         hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
 
-        Map<Integer, Long> offSetMap = consumerMessageQueue.getOffSetMap();
+        Map<Integer, Long> lastMessageMap = consumerMessageQueue.getLastMessageMap();
 
         HsReq<Pull> hsReq = new HsReq<>();
 
@@ -68,7 +68,12 @@ public class PullMessageTask implements Runnable{
         pull.setQueueId(queueId);
         pull.setConsumerName(ConsumerHandlerManger.getConsumerName());
         pull.setSize(10);
-        pull.setOffset(offSetMap.get(queueId));
+
+        if (lastMessageMap.get(queueId)==null){
+            pull.setOffset(0);
+        }else{
+            pull.setOffset(lastMessageMap.get(queueId));
+        }
 
         hsReq.setData(pull);
         hsReq.setOperation(OperationEnum.Pull.getOperation());

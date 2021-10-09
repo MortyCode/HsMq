@@ -51,6 +51,7 @@ public class ConsumerMessageQueue {
         if (concurrentLinkedQueue==null){
             return;
         }
+        lastMessageMap.put(pullMessageResp.getQueueId(),pullMessageResp.getLastIndex());
         concurrentLinkedQueue.addAll(pullMessageResp.getPullMessages());
     }
 

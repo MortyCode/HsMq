@@ -34,7 +34,7 @@ public class ConsumerClient {
         this.port = port;
     }
 
-    public void start() throws InterruptedException {
+    public void start()  {
         log.info("ConsumerClient#start");
         bootstrap = new Bootstrap();
 
