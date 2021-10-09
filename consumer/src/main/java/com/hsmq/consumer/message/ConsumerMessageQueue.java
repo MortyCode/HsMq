@@ -37,7 +37,10 @@ public class ConsumerMessageQueue {
         Map<Integer, Long> serverOffSetMap = messageQueueData.getOffSetMap();
         if (serverOffSetMap!=null&&serverOffSetMap.size()>0){
             offSetMap.putAll(serverOffSetMap);
+            lastMessageMap.putAll(serverOffSetMap);
         }
+
+
     }
 
     /**

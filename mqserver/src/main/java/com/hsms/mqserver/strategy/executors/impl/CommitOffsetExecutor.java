@@ -9,7 +9,10 @@ import com.hsmq.enums.ResultEnum;
 import com.hsmq.storage.data.QueueOffsetStorage;
 import com.hsmq.storage.durability.TopicConsumerData;
 import com.hsmq.storage.file.FileOperation;
+import com.hsms.mqserver.ServerStartup;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
@@ -17,10 +20,16 @@ import com.hsms.mqserver.strategy.executors.BaseExecutor;
  */
 public class CommitOffsetExecutor extends BaseExecutor<SyncOffsetMessage> {
 
+    final static Logger log = LoggerFactory.getLogger(CommitOffsetExecutor.class);
+
+
     @Override
     public HsResp<?> executor(HsReq<SyncOffsetMessage> hsReq) {
         SyncOffsetMessage data = hsReq.getData();
         QueueOffsetStorage.saveConsumer(data.getTopic(),data.getConsumer(), data.getOffSetMap());
+
+        log.info("CommitOffsetExecutor sync offset:{}",data.getOffSetMap());
+
         HsResp<String> resp = new HsResp<>();
         resp.setData("OK");
         resp.setOperation(OperationEnum.CommitOffset.getOperation());

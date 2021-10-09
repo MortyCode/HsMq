@@ -72,7 +72,7 @@ public class PullMessageTask implements Runnable{
         if (lastMessageMap.get(queueId)==null){
             pull.setOffset(0);
         }else{
-            pull.setOffset(lastMessageMap.get(queueId));
+            pull.setOffset(lastMessageMap.get(queueId)+1);
         }
 
         hsReq.setData(pull);

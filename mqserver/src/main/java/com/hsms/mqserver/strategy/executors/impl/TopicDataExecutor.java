@@ -10,12 +10,17 @@ import com.hsmq.storage.data.QueueOffsetStorage;
 import com.hsms.mqserver.data.ConsumerQueueManger;
 import com.hsms.mqserver.data.TopicListener;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
  * @date ：Created in 2021/10/2 3:54 下午
  */
 public class TopicDataExecutor extends BaseExecutor<TopicData> {
+
+    final static Logger log = LoggerFactory.getLogger(TopicDataExecutor.class);
+
 
     @Override
     public HsResp<?> executor(HsReq<TopicData> hsReq) {

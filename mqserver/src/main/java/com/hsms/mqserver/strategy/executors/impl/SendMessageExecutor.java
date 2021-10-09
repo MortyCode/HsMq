@@ -5,6 +5,8 @@ import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
 import com.hsmq.data.message.SendMessage;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
@@ -12,6 +14,7 @@ import com.hsms.mqserver.strategy.executors.BaseExecutor;
  */
 public class SendMessageExecutor extends BaseExecutor<SendMessage> {
 
+    Logger logger = LoggerFactory.getLogger(PullExecutor.class);
 
     @Override
     public HsResp<?> executor(HsReq<SendMessage> hsReq) {

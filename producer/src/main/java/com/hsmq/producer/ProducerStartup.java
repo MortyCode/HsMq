@@ -23,7 +23,7 @@ public class ProducerStartup {
         ChannelFuture channelFuture = baseConsumer.getChannelFuture();
 
 
-        for (int i=1;;i++){
+        for (int i=5000;;i++){
             HsEecodeData hsEecodeData = new HsEecodeData();
             hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
 

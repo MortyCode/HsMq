@@ -11,6 +11,8 @@ import com.hsmq.enums.ResultEnum;
 import com.hsms.mqserver.data.ConsumerQueueManger;
 import com.hsms.mqserver.data.TopicListener;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,6 +24,8 @@ import java.util.Optional;
  * @date ：Created in 2021/6/9 1:50 下午
  */
 public class PullExecutor extends BaseExecutor<Pull> {
+
+    final static Logger log = LoggerFactory.getLogger(PullExecutor.class);
 
     @Override
     public HsResp<?> executor(HsReq<Pull> hsReq) {
