@@ -31,8 +31,9 @@ public class TopicDataExecutor extends BaseExecutor<TopicData> {
         TopicListener topicListener = ConsumerQueueManger.getTopicListener(data.getTopic());
 
         messageQueueData.setTopic(data.getTopic());
+        messageQueueData.setConsumerKey(data.getConsumerKey());
         messageQueueData.setQueueSize(topicListener.getQueueSize());
-        messageQueueData.setOffSetMap(QueueOffsetStorage.getOffSetMap(data.getTopic(),data.getConsumerName()));
+        messageQueueData.setOffSetMap(QueueOffsetStorage.getOffSetMap(data.getTopic(),data.getConsumerGroup()));
 
         HsResp<MessageQueueData> resp = new HsResp<>();
         resp.setData(messageQueueData);

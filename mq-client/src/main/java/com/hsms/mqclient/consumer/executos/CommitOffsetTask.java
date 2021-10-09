@@ -8,7 +8,6 @@ import com.hsmq.enums.OperationEnum;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqclient.ClientStartup;
 import com.hsms.mqclient.consumer.config.RegisteredConsumer;
-import com.hsms.mqclient.consumer.consumer.ConsumerHandlerManger;
 import com.hsms.mqclient.consumer.message.ConsumerMessageQueue;
 import io.netty.channel.ChannelFuture;
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ public class CommitOffsetTask implements Runnable{
     @Override
     public void run() {
         Map<Integer, Long> offSetMap = consumerMessageQueue.getOffSetMap();
-        log.info("offSetMap:{}",offSetMap);
+        log.info("consumerGroupL:{} ,offSetMap:{}",consumerMessageQueue.getConsumerGroup(),offSetMap);
         while (true){
             //尚未初始化完成
             if (!RegisteredConsumer.isInit()){
@@ -68,7 +67,7 @@ public class CommitOffsetTask implements Runnable{
 
         SyncOffsetMessage syncOffsetMessage = new SyncOffsetMessage();
         syncOffsetMessage.setTopic(consumerMessageQueue.getTopic());
-        syncOffsetMessage.setConsumer(ConsumerHandlerManger.getConsumerName());
+        syncOffsetMessage.setConsumer(consumerMessageQueue.getConsumerGroup());
         syncOffsetMessage.setOffSetMap(consumerMessageQueue.getOffSetMap());
 
         hsReq.setData(syncOffsetMessage);

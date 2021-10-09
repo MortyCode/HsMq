@@ -1,7 +1,5 @@
 package com.hsms.mqclient;
 
-import com.alibaba.fastjson.JSON;
-import com.hsms.mqclient.consumer.config.ClientConfig;
 import com.hsms.mqclient.consumer.config.RegisteredConsumer;
 import com.hsms.mqclient.consumer.consumer.ConsumerHandlerManger;
 import com.hsms.mqclient.reactor.ClientReactor;
@@ -10,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * @author ：河神
@@ -41,11 +37,11 @@ public class ClientStartup {
         ClientReactor clientReactor = new ClientReactor("127.0.0.1", 9001);
         //启动Netty
         clientReactor.start();
+
         //初始化消费者
-        ConsumerHandlerManger.initConsumer("AConsumer",args,clientReactor.getChannelFuture());
-
-
-
+        args = new String[]{"TopicB"};
+        ConsumerHandlerManger.initConsumer("BBAConsumer",args,clientReactor.getChannelFuture());
+        ConsumerHandlerManger.initConsumer("BBCConsumer",args,clientReactor.getChannelFuture());
 
 
         //发送消息

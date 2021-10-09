@@ -10,15 +10,24 @@ public class TopicData implements Serializable {
 
     private static final long serialVersionUID = -20210610L;
 
-    private String consumerName;
+    private String consumerKey;
+    private String consumerGroup;
     private String topic;
 
-    public String getConsumerName() {
-        return consumerName;
+    public String getConsumerKey() {
+        return consumerKey;
     }
 
-    public void setConsumerName(String consumerName) {
-        this.consumerName = consumerName;
+    public void setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
+    }
+
+    public String getConsumerGroup() {
+        return consumerGroup;
+    }
+
+    public void setConsumerGroup(String consumerGroup) {
+        this.consumerGroup = consumerGroup;
     }
 
     public String getTopic() {

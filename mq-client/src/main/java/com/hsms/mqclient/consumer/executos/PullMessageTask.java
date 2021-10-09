@@ -8,7 +8,6 @@ import com.hsmq.enums.MessageEnum;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqclient.consumer.config.RegisteredConsumer;
-import com.hsms.mqclient.consumer.consumer.ConsumerHandlerManger;
 import com.hsms.mqclient.consumer.message.ConsumerMessageQueue;
 import io.netty.channel.ChannelFuture;
 
@@ -23,10 +22,12 @@ public class PullMessageTask implements Runnable{
 
     private final ConsumerMessageQueue consumerMessageQueue;
     private final ChannelFuture channelFuture;
+    private final String consumerGroup;
     private final String topic;
 
-    public PullMessageTask(ChannelFuture channelFuture,ConsumerMessageQueue consumerMessageQueue) {
+    public PullMessageTask(ChannelFuture channelFuture, String consumerGroup, ConsumerMessageQueue consumerMessageQueue) {
         this.channelFuture = channelFuture;
+        this.consumerGroup = consumerGroup;
         this.topic = consumerMessageQueue.getTopic();
         this.consumerMessageQueue = consumerMessageQueue;
     }
@@ -66,7 +67,7 @@ public class PullMessageTask implements Runnable{
         Pull pull = new Pull();
         pull.setTopic(topic);
         pull.setQueueId(queueId);
-        pull.setConsumerName(ConsumerHandlerManger.getConsumerName());
+        pull.setConsumerGroup(consumerGroup);
         pull.setSize(10);
 
         if (lastMessageMap.get(queueId)==null){

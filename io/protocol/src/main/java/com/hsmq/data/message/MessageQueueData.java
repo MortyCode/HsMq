@@ -2,7 +2,6 @@ package com.hsmq.data.message;
 
 import java.io.Serializable;
 import java.util.Map;
-import java.util.StringJoiner;
 
 /**
  * @author ：河神
@@ -13,6 +12,8 @@ public class MessageQueueData implements Serializable {
     private static final long serialVersionUID = -20210610L;
 
     private String topic;
+
+    private String consumerKey;
 
     private Integer queueSize;
 
@@ -40,5 +41,13 @@ public class MessageQueueData implements Serializable {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public String getConsumerKey() {
+        return consumerKey;
+    }
+
+    public void setConsumerKey(String consumerKey) {
+        this.consumerKey = consumerKey;
     }
 }

@@ -14,6 +14,8 @@ public class PullMessageResp implements Serializable {
 
     private String topic;
 
+    private String consumerGroup;
+
     private Integer queueId;
 
     private Long lastIndex;
@@ -48,5 +50,13 @@ public class PullMessageResp implements Serializable {
 
     public void setLastIndex(Long lastIndex) {
         this.lastIndex = lastIndex;
+    }
+
+    public String getConsumerGroup() {
+        return consumerGroup;
+    }
+
+    public void setConsumerGroup(String consumerGroup) {
+        this.consumerGroup = consumerGroup;
     }
 }

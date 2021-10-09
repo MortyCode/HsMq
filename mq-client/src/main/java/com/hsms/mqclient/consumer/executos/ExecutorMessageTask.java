@@ -20,11 +20,13 @@ public class ExecutorMessageTask implements Runnable{
     private final ConsumerMessageQueue consumerMessageQueue;
     private final ChannelFuture channelFuture;
     private final String topic;
+    private final String consumerGroup;
 
     public ExecutorMessageTask(ChannelFuture channelFuture,
                                ConsumerMessageQueue consumerMessageQueue) {
         this.channelFuture = channelFuture;
         this.topic = consumerMessageQueue.getTopic();
+        this.consumerGroup = consumerMessageQueue.getConsumerGroup();
         this.consumerMessageQueue = consumerMessageQueue;
     }
 
@@ -36,7 +38,7 @@ public class ExecutorMessageTask implements Runnable{
             queueMap.forEach((queueId,queue)->{
                 PullMessage pullMessage = queue.poll();
                 if (pullMessage != null) {
-                    boolean consumer = ConsumerHandlerManger.consumer(pullMessage);
+                    boolean consumer = ConsumerHandlerManger.consumer(consumerGroup,pullMessage);
                     if (consumer) {
                         consumerMessageQueue.confirmOffset(queueId,pullMessage);
                     }

@@ -22,10 +22,19 @@ public class ConsumerMessageQueue {
 
     private final Map<Integer,Long> lastMessageMap = new ConcurrentHashMap<>();
 
+    /**
+     * 主题
+     */
     private final String topic;
 
-    public ConsumerMessageQueue(String topic ) {
+    /**
+     * 消费组
+     */
+    private final String  consumerGroup;
+
+    public ConsumerMessageQueue(String topic ,String consumerGroup) {
         this.topic = topic;
+        this.consumerGroup = consumerGroup;
     }
 
     public void initQueue(MessageQueueData messageQueueData){
@@ -38,8 +47,6 @@ public class ConsumerMessageQueue {
             offSetMap.putAll(serverOffSetMap);
             lastMessageMap.putAll(serverOffSetMap);
         }
-
-
     }
 
     /**
@@ -75,5 +82,9 @@ public class ConsumerMessageQueue {
 
     public String getTopic() {
         return topic;
+    }
+
+    public String getConsumerGroup() {
+        return consumerGroup;
     }
 }

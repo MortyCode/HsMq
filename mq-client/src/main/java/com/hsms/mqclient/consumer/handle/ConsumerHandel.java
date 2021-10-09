@@ -25,7 +25,7 @@ public class ConsumerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
         if (data.getData()!=null){
             if (data.getData() instanceof PullMessageResp){
                 PullMessageResp pullMessageResp = (PullMessageResp) data.getData();
-                ConsumerMessageQueue queue = RegisteredConsumer.getConsumerMessageQueueMap().get(pullMessageResp.getTopic());
+                ConsumerMessageQueue queue = RegisteredConsumer.getConsumerMessageQueue(pullMessageResp.getTopic(),pullMessageResp.getConsumerGroup());
                 if (queue!=null){
                     queue.addMessage(pullMessageResp);
                 }else{

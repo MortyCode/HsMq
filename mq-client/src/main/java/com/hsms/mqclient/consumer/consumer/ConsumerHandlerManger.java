@@ -8,7 +8,8 @@ import io.netty.channel.ChannelFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ：河神
@@ -16,27 +17,34 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConsumerHandlerManger {
 
-    private static final ConcurrentHashMap<String,AbstractConsumer> consumerMap = new ConcurrentHashMap<>();
-    private static String consumerName ;
-
-    public static String getConsumerName() {
-        return consumerName;
-    }
+    private static final Map<String, Map<String,AbstractConsumer>>  allConsumerMap = new HashMap<>();
 
     final static Logger log = LoggerFactory.getLogger(TopicBConsumer.class);
 
 
-    public static void initConsumer(String consumerName, String[] topics, ChannelFuture channelFuture){
+    public static void initConsumer(String consumerGroup, String[] topics, ChannelFuture channelFuture){
         log.info("initConsumer start");
-        ConsumerHandlerManger.consumerName = consumerName;
+
+        //注册消费组对应的消费者
+        Map<String,AbstractConsumer> consumerMap = new HashMap<>();
         consumerMap.put("TopicA",new TopicAConsumer());
         consumerMap.put("TopicB",new TopicBConsumer());
-        //
-        RegisteredConsumer.init(topics,channelFuture);
+        allConsumerMap.put(consumerGroup,consumerMap);
+
+        //初始化消费者
+        RegisteredConsumer.setChannelFuture(channelFuture);
+        RegisteredConsumer.init(consumerGroup,topics);
+
         log.info("initConsumer end");
     }
 
-    public static boolean consumer(PullMessage pullMessage){
+    public static boolean consumer(String consumerGroup,PullMessage pullMessage){
+
+        Map<String, AbstractConsumer> consumerMap = allConsumerMap.get(consumerGroup);
+        if (consumerMap==null){
+            log.error("ConsumerGroup:{} Not Exists Consumer",pullMessage.getTopic());
+            return false;
+        }
         AbstractConsumer abstractConsumer = consumerMap.get(pullMessage.getTopic());
         if (abstractConsumer==null){
             log.error("Topic:{} Not Exists Consumer",pullMessage.getTopic());

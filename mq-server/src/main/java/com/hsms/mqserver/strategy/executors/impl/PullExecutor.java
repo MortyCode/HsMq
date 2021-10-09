@@ -5,7 +5,6 @@ import com.hsmq.data.HsResp;
 import com.hsmq.data.message.Pull;
 import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.PullMessageResp;
-import com.hsmq.data.message.SendMessage;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
 import com.hsms.mqserver.data.ConsumerQueueManger;
@@ -14,7 +13,6 @@ import com.hsms.mqserver.strategy.executors.BaseExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +40,7 @@ public class PullExecutor extends BaseExecutor<Pull> {
         pullMessageResp.setPullMessages(pullMessages);
         pullMessageResp.setTopic(pull.getTopic());
         pullMessageResp.setQueueId(pull.getQueueId());
+        pullMessageResp.setConsumerGroup(pull.getConsumerGroup());
         if (pullMessages!=null){
             Optional<Long> first = pullMessages.stream().map(PullMessage::getIndex).max(Comparator.comparing(Long::longValue));
             first.ifPresent(pullMessageResp::setLastIndex);

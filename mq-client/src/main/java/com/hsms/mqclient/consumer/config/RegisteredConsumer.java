@@ -40,38 +40,39 @@ public class RegisteredConsumer {
         stopWatch.start();
     }
 
-    public static Map<String, ConsumerMessageQueue> getConsumerMessageQueueMap() {
-        return consumerMessageQueueMap;
+    public static ConsumerMessageQueue getConsumerMessageQueue(String topic,String consumerGroup){
+        return consumerMessageQueueMap.get(consumerKey(topic,consumerGroup));
     }
 
-    public static ChannelFuture getChannelFuture() {
-        return channelFuture;
+    public static String consumerKey(String topic,String consumerGroup){
+        return topic+":"+consumerGroup;
     }
 
-
-    public static void init(String[] topics,ChannelFuture channelFuture){
+    public static void setChannelFuture(ChannelFuture channelFuture) {
         RegisteredConsumer.channelFuture = channelFuture;
-        for (String topic : topics) {
-            RegisteredConsumer.registeredConsumer(topic);
-        }
-        RegisteredConsumer.initConsumerQueue();
     }
 
-    public static void registeredConsumer(String topic){
+    public static void init(String consumerGroup, String[] topics){
+        //注册消费者
+        for (String topic : topics) {
+            RegisteredConsumer.registeredConsumer(topic,consumerGroup);
+        }
+        //根据服务端数据初始化消费者
+        RegisteredConsumer.initConsumerQueue(consumerGroup);
+    }
+
+    public static void registeredConsumer(String topic,String consumerGroup){
         log.info("registeredConsumer topic:[{}]",topic);
         ThreadPoolExecutor executor = ExecutorService.getExecutor();
         //创建消费者
-        ConsumerMessageQueue consumerMessageQueue = new ConsumerMessageQueue(topic);
+        ConsumerMessageQueue consumerMessageQueue = new ConsumerMessageQueue(topic,consumerGroup);
         //注册到管理器中
-        consumerMessageQueueMap.put(topic,consumerMessageQueue);
+        consumerMessageQueueMap.put(consumerKey(topic,consumerGroup),consumerMessageQueue);
         //注册拉取消息任务
-        executor.execute(new PullMessageTask(channelFuture , consumerMessageQueue));
-
+        executor.execute(new PullMessageTask(channelFuture , consumerGroup, consumerMessageQueue));
         //注册执行器任务
         executor.execute(new ExecutorMessageTask(channelFuture ,consumerMessageQueue));
 
-        //注册偏移量提交点
-//        executor.execute(new CommitOffsetTask(channelFuture ,consumerMessageQueue));
         //定时任务
         channelFuture.channel().eventLoop().scheduleWithFixedDelay(()->{
             //定时任务
@@ -86,15 +87,17 @@ public class RegisteredConsumer {
         return initFlag.get()<=0;
     }
 
-    public static void initConsumerQueue(){
-        for (String topic : consumerMessageQueueMap.keySet()) {
+    public static void initConsumerQueue(String consumerGroup){
+
+        consumerMessageQueueMap.forEach((consumerKey,queue)->{
             HsEecodeData hsEecodeData = new HsEecodeData();
             hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
             HsReq<TopicData> hsReq = new HsReq<>();
 
             TopicData topicData = new TopicData();
-            topicData.setTopic(topic);
-            topicData.setConsumerName("AConsumer");
+            topicData.setTopic(queue.getTopic());
+            topicData.setConsumerGroup(queue.getConsumerGroup());
+            topicData.setConsumerKey(consumerKey);
 
             hsReq.setData(topicData);
             hsReq.setOperation(OperationEnum.TopicData.getOperation());
@@ -102,16 +105,16 @@ public class RegisteredConsumer {
 
             try {
                 channelFuture.channel().writeAndFlush(hsEecodeData).sync();
-                log.info("consumer init by req server -  topic:{}",topic);
+                log.info("consumer init by req server -  topic:{}",queue.getTopic());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-        }
+        });
     }
 
     public static void initConsumerQueueHandle(MessageQueueData messageQueueData){
-        ConsumerMessageQueue consumerMessageQueue = consumerMessageQueueMap.get(messageQueueData.getTopic());
+        ConsumerMessageQueue consumerMessageQueue =  consumerMessageQueueMap.get(messageQueueData.getConsumerKey());
         if (consumerMessageQueue==null){
             return;
         }
