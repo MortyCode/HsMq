@@ -8,6 +8,8 @@ import com.hsmq.data.message.PullMessageResp;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
+import com.hsms.mqserver.data.ConsumerQueueManger;
+import com.hsms.mqserver.data.TopicListener;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
 
 import java.util.ArrayList;
@@ -26,16 +28,20 @@ public class PullExecutor extends BaseExecutor<Pull> {
 
         Pull pull = hsReq.getData();
 
-        List<PullMessage> pullMessages = messageStore.pullMessage(pull);
+        TopicListener topicListener = ConsumerQueueManger.getTopicListener(pull.getTopic());
+        if (topicListener==null){
+            return HsResp.typeError();
+        }
 
-        Optional<Long> first = pullMessages.stream().map(PullMessage::getIndex).max(Comparator.comparing(Long::longValue));
-
-
+        List<PullMessage> pullMessages = topicListener.pullMessage(pull);
         PullMessageResp pullMessageResp = new PullMessageResp();
         pullMessageResp.setPullMessages(pullMessages);
         pullMessageResp.setTopic(pull.getTopic());
         pullMessageResp.setQueueId(pull.getQueueId());
-        first.ifPresent(pullMessageResp::setLastIndex);
+        if (pullMessages!=null){
+            Optional<Long> first = pullMessages.stream().map(PullMessage::getIndex).max(Comparator.comparing(Long::longValue));
+            first.ifPresent(pullMessageResp::setLastIndex);
+        }
 
         HsResp<PullMessageResp> resp = new HsResp<>();
         resp.setData(pullMessageResp);

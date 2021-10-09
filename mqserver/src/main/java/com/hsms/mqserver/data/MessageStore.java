@@ -23,15 +23,6 @@ public class MessageStore {
 
     private final MessageStorage messageStorage = new MessageStorage();
 
-
-    public List<PullMessage> pullMessage(Pull pull){
-        ConsumerQueue consumerQueue = ConsumerQueueManger.registerConsumer(pull);
-        if (consumerQueue==null){
-            return null;
-        }
-        return consumerQueue.pullMessage(pull);
-    }
-
     public HsResp<?> saveMessage(SendMessage sendMessage){
         boolean existsTopic = ConsumerQueueManger.existsTopic(sendMessage);
         if (!existsTopic){
@@ -39,11 +30,11 @@ public class MessageStore {
         }
 
         MessageDurability messageDurability = messageStorage.saveMessage(sendMessage);
-        log.info("saveMessage#messageDurability:{}",messageDurability);
         boolean push = ConsumerQueueManger.pushConsumerQueue(sendMessage, messageDurability);
         if (!push){
             return HsResp.topicNotExistsError();
         }
+        log.info("saveMessage#messageDurability:{}",messageDurability);
         HsResp<String> resp = new HsResp<>();
         resp.setData(sendMessage.getMsgId());
         resp.setOperation(OperationEnum.Resp.getOperation());

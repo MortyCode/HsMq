@@ -1,18 +1,19 @@
 package com.hsmq.data.message;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author ：河神
  * @date ：Created in 2021/6/7 3:05 下午
  */
-public class OffsetMessage implements Serializable {
+public class SyncOffsetMessage implements Serializable {
 
     private static final long serialVersionUID = -20210610L;
 
     private String consumer;
     private String topic;
-    private long  offset;
+    private Map<Integer, Long> offSetMap;
 
     public String getConsumer() {
         return consumer;
@@ -30,11 +31,11 @@ public class OffsetMessage implements Serializable {
         this.topic = topic;
     }
 
-    public long getOffset() {
-        return offset;
+    public Map<Integer, Long> getOffSetMap() {
+        return offSetMap;
     }
 
-    public void setOffset(long offset) {
-        this.offset = offset;
+    public void setOffSetMap(Map<Integer, Long> offSetMap) {
+        this.offSetMap = offSetMap;
     }
 }

@@ -15,7 +15,18 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConsumerHandlerManger {
 
     private static final ConcurrentHashMap<String,AbstractConsumer> consumerMap = new ConcurrentHashMap<>();
+    private static String consumerName ;
+
+    public static String getConsumerName() {
+        return consumerName;
+    }
+
+    public static void setConsumerName(String consumerName) {
+        ConsumerHandlerManger.consumerName = consumerName;
+    }
+
     final static Logger log = LoggerFactory.getLogger(TopicBConsumer.class);
+
 
     public static void initConsumer(){
         log.info("initConsumer start");

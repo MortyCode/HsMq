@@ -8,11 +8,12 @@ import com.hsmq.utils.ObjectByteUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class FileOperation {
 
     final static Logger log = LoggerFactory.getLogger(FileOperation.class);
 
-    private static final int MessageDurabilityLength = 20;
+    private static final int MessageDurabilityLength = 24;
 
     public static  void save(String fileName,List<MessageDurability> data) throws IOException {
         if (data==null||data.size()==0){
@@ -35,12 +36,13 @@ public class FileOperation {
         FileChannel fileChannel = rws.getChannel();
         ByteBuffer byteBuffer = ByteBuffer.allocate(data.size()* MessageDurabilityLength);
 
+        long index = fileChannel.size()/MessageDurabilityLength;
         for (MessageDurability messageDurability : data) {
             byte[] bytes = ObjectByteUtils.toByteArray(messageDurability);
             if (bytes==null){
                 throw new FileException("文件转化异常：object not can cast bytes");
             }
-            messageDurability.setIndex(fileChannel.size()/MessageDurabilityLength);
+            messageDurability.setIndex(index++);
 
             byteBuffer.putLong(messageDurability.getOffset());
             byteBuffer.putInt(messageDurability.getLength());
@@ -81,6 +83,7 @@ public class FileOperation {
 
             data.add(messageDurability);
         }
+        fileChannel.close();
         return data;
     }
 
@@ -145,6 +148,7 @@ public class FileOperation {
                     data.add(pullMessage);
                 }
             }
+            fileChannel.close();
             return data;
         } catch (Exception e) {
             log.error("read filer error",e);
@@ -185,6 +189,7 @@ public class FileOperation {
                 }
                 data.add(messageDurability);
             }
+            fileChannel.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -199,6 +204,52 @@ public class FileOperation {
         }
         byteBuffer.flip();
         return byteBuffer;
+    }
+
+    public static void saveString(String fileName ,String object){
+        try {
+            //先删除
+            if (Files.exists(Paths.get(fileName))){
+                Files.delete(Paths.get(fileName));
+            }
+            //再写
+            FileChannel fileChannel =
+                    new RandomAccessFile(fileName, "rw").getChannel();
+
+            byte[] bytes = object.getBytes();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(bytes.length);
+            byteBuffer.put(bytes);
+            byteBuffer.flip();
+
+            fileChannel.write(byteBuffer);
+            fileChannel.force(true);
+            fileChannel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String readString(String fileName){
+        try {
+            FileChannel fileChannel =
+                    new RandomAccessFile(fileName, "r").getChannel();
+
+            ByteBuffer byteBuffer = ByteBuffer.allocate((int) fileChannel.size());
+            int read = fileChannel.read(byteBuffer);
+            if (read<=0){
+                return "";
+            }
+            byteBuffer.flip();
+            fileChannel.close();
+
+            byte[] bytes = new byte[read];
+            byteBuffer.get(bytes);
+
+            return new String(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 

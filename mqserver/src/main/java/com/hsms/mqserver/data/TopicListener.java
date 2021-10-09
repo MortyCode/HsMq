@@ -1,14 +1,17 @@
 package com.hsms.mqserver.data;
 
+import com.hsmq.data.message.Pull;
+import com.hsmq.data.message.PullMessage;
 import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.TopicConfig;
 import com.hsmq.storage.data.MessageDurabilityStorage;
+import com.hsmq.storage.data.MessageStorage;
 import com.hsmq.storage.durability.MessageDurability;
-import com.hsms.mqserver.data.ConsumerQueue;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author ：河神
@@ -16,26 +19,22 @@ import java.util.HashMap;
  */
 public class TopicListener {
 
-    private HashMap<String, ConsumerQueue> messageMappingQueue;
     private TopicConfig topicConfig;
     private volatile int queueId =  0;
     public int queueSize ;
 
-
     public TopicListener(TopicConfig topicConfig) {
-        this.messageMappingQueue = new HashMap<>();
         this.topicConfig = topicConfig;
         this.queueSize = topicConfig.getMessageQueueSize();
     }
 
-    public ConsumerQueue getConsumerQueue(String name){
-        ConsumerQueue consumerQueue = messageMappingQueue.get(name);
-        if (consumerQueue!=null){
-            return consumerQueue;
+
+    public List<PullMessage> pullMessage(Pull pull){
+        List<MessageDurability> data = MessageDurabilityStorage.readMessageQueue(pull.getQueueId(), pull.getTopic(), pull.getOffset());
+        if (data.size()==0){
+            return null;
         }
-        consumerQueue = new ConsumerQueue(topicConfig);
-        messageMappingQueue.put(name,consumerQueue);
-        return consumerQueue;
+        return MessageStorage.readMessages(data);
     }
 
     public boolean addMsg2Queue(SendMessage sendMessage,MessageDurability messageDurability){
@@ -45,11 +44,9 @@ public class TopicListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        messageMappingQueue.forEach((k,consumerQueue)->{
-            consumerQueue.addMessage(queueId,messageDurability);
-        });
         return true;
     }
+
 
     public synchronized int  getQueueId(){
         queueId++;
@@ -59,9 +56,7 @@ public class TopicListener {
         return queueId%queueSize;
     }
 
-
-
-
-
-
+    public int getQueueSize() {
+        return queueSize;
+    }
 }

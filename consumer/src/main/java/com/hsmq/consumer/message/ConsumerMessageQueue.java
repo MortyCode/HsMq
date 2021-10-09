@@ -59,7 +59,7 @@ public class ConsumerMessageQueue {
     }
 
     public void confirmOffset(Integer queueId,PullMessage pullMessage)  {
-        offSetMap.put(queueId,pullMessage.getOffset());
+        offSetMap.put(queueId,pullMessage.getIndex());
     }
 
     public Map<Integer, Long> getOffSetMap() {

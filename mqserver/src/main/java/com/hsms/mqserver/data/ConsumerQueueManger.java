@@ -22,21 +22,9 @@ public class ConsumerQueueManger {
         DATA.put(topicConfig.getTopicName(), new TopicListener(topicConfig));
     }
 
-    public static void recoveryConsumer(){
-        DATA.forEach((k,v)->{
-            //恢复注册的消费序列
-        });
-    }
-
     public static TopicListener getTopicListener(String topic){
         return DATA.get(topic);
     }
-
-    public static ConsumerQueue registerConsumer(Pull pull){
-        TopicListener topicListener = getTopicListener(pull.getTopic());
-        return topicListener.getConsumerQueue(pull.getConsumerName());
-    }
-
 
     public static boolean existsTopic(SendMessage sendMessage){
         return getTopicListener(sendMessage.getTopic())!=null;

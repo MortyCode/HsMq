@@ -1,6 +1,7 @@
 package com.hsmq.consumer.executos;
 
 import com.hsmq.consumer.config.RegisteredConsumer;
+import com.hsmq.consumer.consumer.ConsumerHandlerManger;
 import com.hsmq.consumer.message.ConsumerMessageQueue;
 import com.hsmq.data.Head;
 import com.hsmq.data.HsReq;
@@ -57,13 +58,17 @@ public class PullMessageTask implements Runnable{
     public void pull(Integer queueId) throws InterruptedException {
         HsEecodeData hsEecodeData = new HsEecodeData();
         hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
+
+        Map<Integer, Long> offSetMap = consumerMessageQueue.getOffSetMap();
+
         HsReq<Pull> hsReq = new HsReq<>();
 
         Pull pull = new Pull();
         pull.setTopic(topic);
         pull.setQueueId(queueId);
-        pull.setConsumerName("AConsumer");
+        pull.setConsumerName(ConsumerHandlerManger.getConsumerName());
         pull.setSize(10);
+        pull.setOffset(offSetMap.get(queueId));
 
         hsReq.setData(pull);
         hsReq.setOperation(OperationEnum.Pull.getOperation());

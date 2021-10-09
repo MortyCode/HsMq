@@ -36,6 +36,8 @@ public class ClientStartup {
         ConsumerClient baseConsumer = new ConsumerClient("127.0.0.1", 9001);
         baseConsumer.start();
 
+        //设置消费端名称
+        ConsumerHandlerManger.setConsumerName("AConsumer");
         //初始化消费者
         ConsumerHandlerManger.initConsumer();
         //初始化任务

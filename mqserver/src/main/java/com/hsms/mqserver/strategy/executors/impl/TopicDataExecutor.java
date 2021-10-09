@@ -3,12 +3,10 @@ package com.hsms.mqserver.strategy.executors.impl;
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
 import com.hsmq.data.message.MessageQueueData;
-import com.hsmq.data.message.PullMessageResp;
-import com.hsmq.data.message.SendMessage;
 import com.hsmq.data.message.TopicData;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
-import com.hsms.mqserver.data.ConsumerQueue;
+import com.hsmq.storage.data.QueueOffsetStorage;
 import com.hsms.mqserver.data.ConsumerQueueManger;
 import com.hsms.mqserver.data.TopicListener;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
@@ -26,10 +24,10 @@ public class TopicDataExecutor extends BaseExecutor<TopicData> {
         MessageQueueData messageQueueData = new MessageQueueData();
 
         TopicListener topicListener = ConsumerQueueManger.getTopicListener(data.getTopic());
-        ConsumerQueue consumerQueue = topicListener.getConsumerQueue(data.getConsumerName());
 
         messageQueueData.setTopic(data.getTopic());
-        messageQueueData.setQueueSize(consumerQueue.getQueueSize());
+        messageQueueData.setQueueSize(topicListener.getQueueSize());
+        messageQueueData.setOffSetMap(QueueOffsetStorage.getOffSetMap(data.getTopic(),data.getConsumerName()));
 
         HsResp<MessageQueueData> resp = new HsResp<>();
         resp.setData(messageQueueData);

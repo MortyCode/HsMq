@@ -17,21 +17,6 @@ import java.util.List;
  */
 public class MessageDurabilityStorage {
 
-//    public static void main(String[] args) throws IOException {
-//        List<MessageDurability> data = new ArrayList<>();
-//        data.add(new MessageDurability(1,2,312));
-//        data.add(new MessageDurability(12,4,-12123));
-//        data.add(new MessageDurability(31,6,312121));
-//        data.add(new MessageDurability(41,10,123));
-//        saveMessageQueue(1,"TopicA",data);
-//
-//        System.out.println("aa`");
-//        List<MessageDurability> topicA = readMessageQueue(1, "TopicA",2);
-//        for (MessageDurability messageDurability : topicA) {
-//            System.out.println(messageDurability);
-//        }
-//    }
-
 
     public static void saveMessageQueue(Integer queueId,String topic, List<MessageDurability> data) throws IOException {
         String queueFileName = StorageConfig.MessagePath + topic +StorageConfig.Queue + queueId;
@@ -53,9 +38,5 @@ public class MessageDurabilityStorage {
         }
         return new ArrayList<>();
     }
-
-
-
-
 
 }

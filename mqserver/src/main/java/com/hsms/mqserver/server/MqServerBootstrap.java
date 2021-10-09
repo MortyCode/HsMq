@@ -17,8 +17,6 @@ public class MqServerBootstrap {
         ServerConfig.TopicConfig.forEach((topic,config)->{
             ConsumerQueueManger.registerTopic(config);
         });
-        //恢复消费组消费序列
-        ConsumerQueueManger.recoveryConsumer();
         //启动服务
         worker = new Thread(new ObjectReactor(ServerConfig.Port));
         worker.start();
