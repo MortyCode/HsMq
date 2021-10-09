@@ -1,8 +1,10 @@
 package com.hsms.mqclient.consumer.consumer;
 
 import com.hsmq.data.message.PullMessage;
+import com.hsms.mqclient.consumer.config.RegisteredConsumer;
 import com.hsms.mqclient.consumer.consumer.sub.TopicAConsumer;
 import com.hsms.mqclient.consumer.consumer.sub.TopicBConsumer;
+import io.netty.channel.ChannelFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +26,13 @@ public class ConsumerHandlerManger {
     final static Logger log = LoggerFactory.getLogger(TopicBConsumer.class);
 
 
-    public static void initConsumer(String consumerName){
+    public static void initConsumer(String consumerName, String[] topics, ChannelFuture channelFuture){
         log.info("initConsumer start");
         ConsumerHandlerManger.consumerName = consumerName;
         consumerMap.put("TopicA",new TopicAConsumer());
         consumerMap.put("TopicB",new TopicBConsumer());
+        //
+        RegisteredConsumer.init(topics,channelFuture);
         log.info("initConsumer end");
     }
 

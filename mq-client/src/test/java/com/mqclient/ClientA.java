@@ -1,4 +1,4 @@
-package com.hsms.mqclient;
+package com.mqclient;
 
 import com.hsmq.data.Head;
 import com.hsmq.data.HsReq;
@@ -10,29 +10,17 @@ import com.hsms.mqclient.consumer.config.RegisteredConsumer;
 import com.hsms.mqclient.consumer.consumer.ConsumerHandlerManger;
 import com.hsms.mqclient.reactor.ClientReactor;
 import org.apache.commons.lang3.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author ：河神
- * @date ：Created in 2021/6/6 6:25 下午
+ * @date ：Created in 2021/10/9 2:22 下午
  */
-public class ClientStartup {
-
-    final static Logger log = LoggerFactory.getLogger(ClientStartup.class);
+public class ClientA {
 
 
     public static void main(String[] args) throws InterruptedException {
 
-        String start =
-                "\n" +
-                        " _   _  _____        _____ _ _            _   \n" +
-                        "| | | |/  ___|      /  __ \\ (_)          | |  \n" +
-                        "| |_| |\\ `--. ______| /  \\/ |_  ___ _ __ | |_ \n" +
-                        "|  _  | `--. \\______| |   | | |/ _ \\ '_ \\| __|\n" +
-                        "| | | |/\\__/ /      | \\__/\\ | |  __/ | | | |_ \n" +
-                        "\\_| |_/\\____/        \\____/_|_|\\___|_| |_|\\__|\n";
-        log.info(start);
+        args = new String[]{"TopicB"};
 
         //记录启动时间
         RegisteredConsumer.setStopWatch(new StopWatch());
@@ -53,8 +41,8 @@ public class ClientStartup {
 
             hsReq.setOperation(OperationEnum.SendMessage.getOperation());
 
-            sendMessage.setTopic("TopicB");
-            sendMessage.setTag("tagB");
+            sendMessage.setTopic("TopicA");
+            sendMessage.setTag("tagA");
             sendMessage.setBody("消息---"+i);
             hsReq.setData(sendMessage);
             hsEecodeData.setData(hsReq);
