@@ -35,9 +35,9 @@ public class RegisteredConsumer {
     private static StopWatch stopWatch;
     private static Map<String, ConsumerMessageQueue> consumerMessageQueueMap = new HashMap<>();
 
-    public static void setStopWatch(StopWatch stopWatch) {
-        RegisteredConsumer.stopWatch = stopWatch;
-        stopWatch.start();
+    public static void setStopWatch() {
+        RegisteredConsumer.stopWatch = new StopWatch();
+        RegisteredConsumer.stopWatch.start();
     }
 
     public static ConsumerMessageQueue getConsumerMessageQueue(String topic,String consumerGroup){
@@ -124,7 +124,7 @@ public class RegisteredConsumer {
         initFlag.decrementAndGet();
 
         if (isInit()){
-            stopWatch.stop();
+//            stopWatch.stop();
             log.info("Consumer Start End");
         }
 

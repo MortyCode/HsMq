@@ -3,9 +3,11 @@ package com.hsms.mqclient.consumer.handle;
 import com.hsmq.data.HsResp;
 import com.hsmq.data.message.MessageQueueData;
 import com.hsmq.data.message.PullMessageResp;
+import com.hsmq.enums.OperationEnum;
 import com.hsmq.protocol.HsDecodeData;
 import com.hsms.mqclient.consumer.config.RegisteredConsumer;
 import com.hsms.mqclient.consumer.message.ConsumerMessageQueue;
+import com.hsms.mqclient.producer.send.MessageClient;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -35,6 +37,12 @@ public class ConsumerHandel extends SimpleChannelInboundHandler<HsDecodeData> {
             if (data.getData() instanceof MessageQueueData){
                 RegisteredConsumer.initConsumerQueueHandle((MessageQueueData)data.getData());
             }
+
+            if (OperationEnum.SendMessage.getOperation().equals(data.getReqType())){
+                System.out.println("发送消息成功");
+                MessageClient.executorResp(data);
+            }
+
         }
     }
 

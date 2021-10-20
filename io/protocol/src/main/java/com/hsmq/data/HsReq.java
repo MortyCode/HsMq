@@ -20,6 +20,8 @@ public class HsReq<T> implements Serializable {
 
     private T data;
 
+    private Integer reqId;
+
     public String getOperation() {
         return operation;
     }
@@ -38,5 +40,13 @@ public class HsReq<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public Integer getReqId() {
+        return reqId;
+    }
+
+    public void setReqId(Integer reqId) {
+        this.reqId = reqId;
     }
 }

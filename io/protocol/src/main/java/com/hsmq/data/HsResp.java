@@ -18,6 +18,10 @@ public class HsResp<T> implements Serializable {
 
     private String operation;
 
+    private String reqType;
+
+    private Integer reqId;
+
     private boolean success = true;
 
     private T data;
@@ -62,6 +66,22 @@ public class HsResp<T> implements Serializable {
 
     public void setDatas(List<T> datas) {
         this.datas = datas;
+    }
+
+    public String getReqType() {
+        return reqType;
+    }
+
+    public Integer getReqId() {
+        return reqId;
+    }
+
+    public void setReqId(Integer reqId) {
+        this.reqId = reqId;
+    }
+
+    public void setReqType(String reqType) {
+        this.reqType = reqType;
     }
 
     public static HsResp<Void> typeError(){

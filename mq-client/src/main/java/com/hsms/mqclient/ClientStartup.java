@@ -1,9 +1,11 @@
 package com.hsms.mqclient;
 
+import com.hsmq.data.message.SendMessage;
 import com.hsms.mqclient.consumer.config.RegisteredConsumer;
 import com.hsms.mqclient.consumer.consumer.ConsumerHandlerManger;
+import com.hsms.mqclient.producer.dto.SendMessageResult;
+import com.hsms.mqclient.producer.send.MessageClient;
 import com.hsms.mqclient.reactor.ClientReactor;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +33,7 @@ public class ClientStartup {
         log.info(start);
 
         //记录启动时间
-        RegisteredConsumer.setStopWatch(new StopWatch());
+        RegisteredConsumer.setStopWatch();
 
         //注册Netty
         ClientReactor clientReactor = new ClientReactor("127.0.0.1", 9001);
@@ -43,25 +45,34 @@ public class ClientStartup {
         ConsumerHandlerManger.initConsumer("BBAConsumer",args,clientReactor.getChannelFuture());
         ConsumerHandlerManger.initConsumer("BBCConsumer",args,clientReactor.getChannelFuture());
 
+        //初始化生产者
+        MessageClient.setChannelFuture(clientReactor.getChannelFuture());
+
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setTopic("TopicB");
+        sendMessage.setTag("tagB");
+        sendMessage.setBody("消息---1");
+
+        for (int i=0;i<100000;i++){
+            SendMessageResult b = MessageClient.sendMsg(sendMessage);
+
+            if (!Integer.valueOf(200).equals(b.getMessageResult())){
+                System.out.println("消息发送失败 : "+b);
+                break;
+            }
+            System.out.println("消息发送 : "+b);
+            Thread.sleep(100L);
+        }
 
         //发送消息
 //        for (int i=5000;;i++){
-//            HsEecodeData hsEecodeData = new HsEecodeData();
-//            hsEecodeData.setHead(Head.toHead(MessageEnum.Req));
-//
-//            HsReq<SendMessage> hsReq = new HsReq<>();
 //            SendMessage sendMessage = new SendMessage();
-//
-//            hsReq.setOperation(OperationEnum.SendMessage.getOperation());
-//
 //            sendMessage.setTopic("TopicB");
 //            sendMessage.setTag("tagB");
 //            sendMessage.setBody("消息---"+i);
-//            hsReq.setData(sendMessage);
-//            hsEecodeData.setData(hsReq);
-//
+//            MessageClient.sendMsg(sendMessage);
 //            Thread.sleep(100L);
-//            clientReactor.getChannelFuture().channel().writeAndFlush(hsEecodeData).sync();
 //        }
 
     }

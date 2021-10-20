@@ -19,6 +19,7 @@ public class NormalHandel extends SimpleChannelInboundHandler<HsDecodeData> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HsDecodeData msg) throws Exception {
         HsResp<?> data = (HsResp<?>) msg.getData();
+        System.out.println("普通返回");
         if (data.getData()!=null){
             if (data.getData() instanceof String){
                 log.info("普通返回:{}：",JSON.toJSONString(msg.getData()));

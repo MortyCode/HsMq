@@ -38,11 +38,16 @@ public class MessageStrategy {
 
         OperationEnum operationEnum = hsReq.getOperationEnum();
         if (operationEnum==null){
-            return HsEecodeData.resp(HsError.ParameterWrongType);
+            HsResp<?> parameterWrongType = HsError.ParameterWrongType;
+            parameterWrongType.setReqType(hsReq.getOperation());
+            parameterWrongType.setReqId(hsReq.getReqId());
+            return HsEecodeData.resp(parameterWrongType);
         }
 
         BaseExecutor<?> baseExecutor = enumExecutorMap.get(operationEnum);
         HsResp<?> hsResp = baseExecutor.executor0(hsReq);
+        hsResp.setReqType(hsReq.getOperation());
+        hsResp.setReqId(hsReq.getReqId());
         return HsEecodeData.resp(hsResp);
     }
 

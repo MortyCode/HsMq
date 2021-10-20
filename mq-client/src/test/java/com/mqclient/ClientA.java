@@ -9,7 +9,6 @@ import com.hsmq.protocol.HsEecodeData;
 import com.hsms.mqclient.consumer.config.RegisteredConsumer;
 import com.hsms.mqclient.consumer.consumer.ConsumerHandlerManger;
 import com.hsms.mqclient.reactor.ClientReactor;
-import org.apache.commons.lang3.time.StopWatch;
 
 /**
  * @author ：河神
@@ -23,7 +22,7 @@ public class ClientA {
         args = new String[]{"TopicB"};
 
         //记录启动时间
-        RegisteredConsumer.setStopWatch(new StopWatch());
+        RegisteredConsumer.setStopWatch();
         //注册Netty
         ClientReactor clientReactor = new ClientReactor("127.0.0.1", 9001);
         //启动Netty
