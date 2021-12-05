@@ -1,7 +1,6 @@
 package com.hsms.mqserver;
 
 
-import com.google.common.base.Stopwatch;
 import com.hsmq.storage.config.TopicConfig;
 import com.hsms.mqserver.config.ServerConfig;
 import com.hsms.mqserver.server.MqServerBootstrap;
@@ -29,10 +28,10 @@ public class ServerStartup {
                        "| | | |/\\__/ /      /\\__/ /  __/ |   \\ V /  __/ |   \n" +
                        "\\_| |_/\\____/       \\____/ \\___|_|    \\_/ \\___|_|   \n";
        log.info(start);
-       Stopwatch stopwatch = Stopwatch.createStarted();
+       //默认配置
        buildConfig();
+       //启动Reactor Server
        new MqServerBootstrap().start();
-        log.info("Start Server Use "+stopwatch.stop());
     }
 
 

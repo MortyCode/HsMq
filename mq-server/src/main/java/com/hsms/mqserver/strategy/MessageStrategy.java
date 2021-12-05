@@ -11,6 +11,8 @@ import com.hsms.mqserver.strategy.executors.impl.CommitOffsetExecutor;
 import com.hsms.mqserver.strategy.executors.impl.PullExecutor;
 import com.hsms.mqserver.strategy.executors.impl.SendMessageExecutor;
 import com.hsms.mqserver.strategy.executors.impl.TopicDataExecutor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +23,9 @@ import java.util.Map;
  */
 public class MessageStrategy {
 
+    final static Logger log = LoggerFactory.getLogger(MessageStrategy.class);
 
-    private static Map<OperationEnum, BaseExecutor<?>> enumExecutorMap ;
+    private static final Map<OperationEnum, BaseExecutor<?>> enumExecutorMap ;
 
     static {
         enumExecutorMap = new HashMap<>();
@@ -30,7 +33,7 @@ public class MessageStrategy {
         enumExecutorMap.put(OperationEnum.Pull,new PullExecutor());
         enumExecutorMap.put(OperationEnum.CommitOffset,new CommitOffsetExecutor());
         enumExecutorMap.put(OperationEnum.TopicData,new TopicDataExecutor());
-        System.out.println("init MessageStrategy");
+        log.info("Init MessageStrategy");
     }
 
     public static HsEecodeData executor(HsDecodeData hsDecodeData){

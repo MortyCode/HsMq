@@ -54,7 +54,7 @@ public class ClientStartup {
         sendMessage.setTag("tagB");
         sendMessage.setBody("消息---1");
 
-        for (int i=0;i<100000;i++){
+        for (int i=0;i<2;i++){
             SendMessageResult b = MessageClient.sendMsg(sendMessage);
 
             if (!Integer.valueOf(200).equals(b.getMessageResult())){
