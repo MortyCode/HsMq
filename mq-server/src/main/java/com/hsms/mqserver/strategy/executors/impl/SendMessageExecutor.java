@@ -20,7 +20,9 @@ public class SendMessageExecutor extends BaseExecutor<SendMessage> {
     public HsResp<?> executor(HsReq<SendMessage> hsReq) {
         SendMessage sendMessage = hsReq.getData();
         sendMessage.setMsgId(MessageIdUtils.newMsgId(sendMessage.getTopic()));
-        return messageStore.saveMessage(sendMessage);
+        HsResp<?> hsResp = messageStore.saveMessage(sendMessage);
+        hsResp.setReqId(hsReq.getReqId());
+        return hsResp;
     }
 
     @Override

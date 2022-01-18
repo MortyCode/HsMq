@@ -63,6 +63,9 @@ public class ObjectReactor implements Runnable{
             //定时任务
         },1, 3L,TimeUnit.SECONDS);
 
+//        channelFuture.channel().eventLoop().schedule(()->{},
+//                1, 3L,TimeUnit.SECONDS);
+
         channelFuture.channel().closeFuture().sync();
     }
 }

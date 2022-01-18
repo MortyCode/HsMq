@@ -44,9 +44,10 @@ public class ClientA {
             sendMessage.setTag("tagA");
             sendMessage.setBody("消息---"+i);
             hsReq.setData(sendMessage);
+            hsReq.setReqId(i);
             hsEecodeData.setData(hsReq);
 
-            Thread.sleep(100L);
+            Thread.sleep(1000L);
             clientReactor.getChannelFuture().channel().writeAndFlush(hsEecodeData).sync();
         }
 
