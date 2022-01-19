@@ -166,8 +166,8 @@ public static synchronized MessageDurability save(String fileName,Object object)
 ```
 ### 2.2.2 消息消费队列存储
 #### 存储格式
-| ​
-| Offset | Length | TagHashcode | Index | ...... |
+
+| - | Offset | Length | TagHashcode | Index | ...... |
 | --- | --- | --- | --- | --- | --- |
 | 解释 | 偏移量 | 消息长度 | 消息tagHashCode | 这个队列里面的第几个消息 | ...... |
 | 占用 | long(8个字节) | int(4个字节) | int(4个字节) | long(8个字节) | ...... |
