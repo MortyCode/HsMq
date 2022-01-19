@@ -10,7 +10,6 @@ import com.hsms.mqserver.reactor.ObjectReactor;
  */
 public class MqServerBootstrap {
 
-    public Thread worker;
 
     public void start() {
         //启动注册topic
@@ -18,7 +17,7 @@ public class MqServerBootstrap {
             ConsumerQueueManger.registerTopic(config);
         });
         //启动服务
-        worker = new Thread(new ObjectReactor(ServerConfig.Port));
-        worker.start();
+        new ObjectReactor(ServerConfig.Port).start();
+
     }
 }

@@ -48,10 +48,7 @@ public class MessageStrategy {
         }
 
         BaseExecutor<?> baseExecutor = enumExecutorMap.get(operationEnum);
-        HsResp<?> hsResp = baseExecutor.executor0(hsReq);
-        hsResp.setReqType(hsReq.getOperation());
-        hsResp.setReqId(hsReq.getReqId());
-        return HsEecodeData.resp(hsResp);
+        return baseExecutor.executorReq(hsReq);
     }
 
 

@@ -19,23 +19,22 @@ import java.util.concurrent.TimeUnit;
  * @author ：河神
  * @date ：Created in 2021/6/4 3:53 下午
  */
-public class ObjectReactor implements Runnable{
+public class ObjectReactor {
 
     private final int port;
     public ObjectReactor(int port ) {
         this.port = port;
     }
 
-    @Override
-    public void run() {
+    public void start() {
         try {
-            start();
+            start0();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void start() throws InterruptedException {
+    public void start0() throws InterruptedException {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup work = new NioEventLoopGroup();
@@ -45,7 +44,7 @@ public class ObjectReactor implements Runnable{
 
         serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
-            protected void initChannel(SocketChannel socketChannel) throws Exception {
+            protected void initChannel(SocketChannel socketChannel)  {
                 ChannelPipeline pipeline = socketChannel.pipeline();
                 pipeline.addLast(new LengthObjectDecode());
                 pipeline.addLast(new LengthObjectEncode());

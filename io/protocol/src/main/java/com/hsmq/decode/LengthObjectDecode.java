@@ -21,7 +21,6 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
             Integer.parseInt(System.getProperty("com.hsmq.frameMaxLength", "16777216"));
 
     public LengthObjectDecode() {
-
         super(FRAME_MAX_LENGTH, 0, 4, 0, 4);
     }
 
@@ -38,7 +37,6 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
             }
             ByteBuffer byteBuffer = frame.nioBuffer();
 
-            int limit = byteBuffer.limit();
             int headLength = byteBuffer.getInt();
             byte[] headData = new byte[headLength];
             byteBuffer.get(headData);
@@ -61,7 +59,6 @@ public class LengthObjectDecode extends LengthFieldBasedFrameDecoder {
             decodeData.setHead(head);
             decodeData.setData(ObjectByteUtils.toObject(dataData));
             decodeData.setMsgTypeEnum(msgTypeEnum);
-
             return decodeData;
         }catch (Exception e){
             e.printStackTrace();
