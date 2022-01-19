@@ -5,14 +5,11 @@ import com.hsmq.data.message.SendMessage;
 import com.hsmq.storage.config.StorageConfig;
 import com.hsmq.storage.durability.MessageDurability;
 import com.hsmq.storage.file.FileOperation;
-import com.hsmq.utils.ObjectByteUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 持久化消息
@@ -31,8 +28,7 @@ public class MessageStorage {
     public static MessageDurability saveMessage(SendMessage sendMessage){
         try {
             synchronized (MessageStorage.class){
-                MessageDurability messageDurability = FileOperation.save(StorageConfig.MessagePath + "mq_1", sendMessage);
-                return messageDurability;
+                return FileOperation.save(StorageConfig.MessagePath + "mq_1", sendMessage);
             }
         } catch (IOException | InterruptedException e) {
             log.error("save filer error",e);
