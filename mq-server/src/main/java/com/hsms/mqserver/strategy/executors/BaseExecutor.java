@@ -15,10 +15,15 @@ public abstract class BaseExecutor<T> {
 
     public abstract HsResp<?> executor(HsReq<T> hsReq);
 
-    public abstract HsResp<?> executor0(HsReq<?> hsReq);
+    public abstract HsReq<T> convertReq(HsReq<?> hsReq);
 
     public HsEecodeData executorReq(HsReq<?> hsReq){
-        HsResp<?> hsResp = this.executor0(hsReq);
+        HsReq<T> fixedHsReq = convertReq(hsReq);
+        if (fixedHsReq==null){
+            return HsEecodeData.typeError();
+        }
+
+        HsResp<?> hsResp = executor(fixedHsReq);
         hsResp.setReqType(hsReq.getOperation());
         hsResp.setReqId(hsReq.getReqId());
         return HsEecodeData.resp(hsResp);

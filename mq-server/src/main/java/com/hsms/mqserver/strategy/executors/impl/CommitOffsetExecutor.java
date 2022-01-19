@@ -2,14 +2,10 @@ package com.hsms.mqserver.strategy.executors.impl;
 
 import com.hsmq.data.HsReq;
 import com.hsmq.data.HsResp;
-import com.hsmq.data.message.Confirm;
 import com.hsmq.data.message.SyncOffsetMessage;
 import com.hsmq.enums.OperationEnum;
 import com.hsmq.enums.ResultEnum;
 import com.hsmq.storage.data.QueueOffsetStorage;
-import com.hsmq.storage.durability.TopicConsumerData;
-import com.hsmq.storage.file.FileOperation;
-import com.hsms.mqserver.ServerStartup;
 import com.hsms.mqserver.strategy.executors.BaseExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +34,13 @@ public class CommitOffsetExecutor extends BaseExecutor<SyncOffsetMessage> {
     }
 
     @Override
-    public HsResp<?> executor0(HsReq<?> hsReq) {
+    public HsReq<SyncOffsetMessage> convertReq(HsReq<?> hsReq) {
         if (hsReq.getData() instanceof SyncOffsetMessage){
             HsReq<SyncOffsetMessage> data = new HsReq<>();
             data.setData((SyncOffsetMessage)hsReq.getData());
             data.setOperation(hsReq.getOperation());
-            return executor(data);
+            return data;
         }
-        return HsResp.typeError();
+        return null;
     }
 }

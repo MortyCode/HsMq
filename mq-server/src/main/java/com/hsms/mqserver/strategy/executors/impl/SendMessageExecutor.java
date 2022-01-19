@@ -26,14 +26,14 @@ public class SendMessageExecutor extends BaseExecutor<SendMessage> {
     }
 
     @Override
-    public HsResp<?> executor0(HsReq<?> hsReq) {
+    public HsReq<SendMessage> convertReq(HsReq<?> hsReq) {
         if (hsReq.getData() instanceof SendMessage){
             HsReq<SendMessage> data = new HsReq<>();
             data.setData((SendMessage)hsReq.getData());
             data.setOperation(hsReq.getOperation());
-            return executor(data);
+            return data;
         }
-        return HsResp.typeError();
+        return null;
     }
 
 }

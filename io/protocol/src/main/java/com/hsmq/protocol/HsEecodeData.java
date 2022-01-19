@@ -52,4 +52,11 @@ public class HsEecodeData {
         return respHsDecodeData;
     }
 
+    public static HsEecodeData typeError(){
+        HsEecodeData respHsDecodeData = new HsEecodeData();
+        respHsDecodeData.setHead(Head.toHead(MessageEnum.Resp));
+        respHsDecodeData.setData(HsResp.typeError());
+        return respHsDecodeData;
+    }
+
 }

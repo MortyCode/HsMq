@@ -49,4 +49,12 @@ public class HsReq<T> implements Serializable {
     public void setReqId(Integer reqId) {
         this.reqId = reqId;
     }
+
+    public <T> HsReq<T>  convertReq(){
+        HsReq<T> data = new HsReq<>();
+        data.setData((T)data);
+        data.setOperation(getOperation());
+        return data;
+
+    }
 }

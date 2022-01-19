@@ -54,13 +54,13 @@ public class PullExecutor extends BaseExecutor<Pull> {
     }
 
     @Override
-    public HsResp<?> executor0(HsReq<?> hsReq) {
+    public HsReq<Pull> convertReq(HsReq<?> hsReq) {
         if (hsReq.getData() instanceof Pull){
             HsReq<Pull> data = new HsReq<>();
             data.setData((Pull)hsReq.getData());
             data.setOperation(hsReq.getOperation());
-            return executor(data);
+            return data;
         }
-        return HsResp.typeError();
+        return null;
     }
 }

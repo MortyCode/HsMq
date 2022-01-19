@@ -44,13 +44,13 @@ public class TopicDataExecutor extends BaseExecutor<TopicData> {
     }
 
     @Override
-    public HsResp<?> executor0(HsReq<?> hsReq) {
+    public HsReq<TopicData> convertReq(HsReq<?> hsReq) {
         if (hsReq.getData() instanceof TopicData){
             HsReq<TopicData> data = new HsReq<>();
             data.setData((TopicData)hsReq.getData());
             data.setOperation(hsReq.getOperation());
-            return executor(data);
+            return data;
         }
-        return HsResp.typeError();
+        return null;
     }
 }
