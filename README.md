@@ -60,7 +60,7 @@
 ```
 ### 2.1.2 处理模板
 
-- 这里有一个细节,这里有两个方法，**executor**方法的泛型是**T 标识一个确定的类型**,**executor0** 方法泛型的是**? 标识一个不确定的类型**.
+- 这里有一个细节,这里有两个方法，**executor** 方法的泛型是 **T 标识一个确定的类型**,**executor0** 方法泛型的是 **? 标识一个不确定的类型** .
 - 因为从HsDecodeData获取的对象是Object类型,并不知道此时类型是什么，所以convertReq的意义就是校验请求对象的数据是不是处理器需要的数据类型，并且转换。
 ```java
 public abstract class BaseExecutor<T> {
@@ -178,8 +178,8 @@ public static synchronized MessageDurability save(String fileName,Object object)
 ## 2.3  消息拉取 PullExecutor
 ### 2.3.1 消息队列queue
 
-- 消息在存储到** mq_n **之后，会将消息分配到 消息队列之后，然后消费者在拉取消息的时候，会指定queueId来进行拉取数据。
-- 拉取消息的话，会首先读取queue的信息，读取出指定偏移量的n条数据的信息，然后去 **mq_n **去查询
+- 消息在存储到 **mq_n** 之后，会将消息分配到 消息队列之后，然后消费者在拉取消息的时候，会指定queueId来进行拉取数据。
+- 拉取消息的话，会首先读取queue的信息，读取出指定偏移量的n条数据的信息，然后去 **mq_n ** 去查询
 ```java
 public List<PullMessage> pullMessage(Pull pull){
     //读取n条数据
