@@ -243,8 +243,8 @@ public List<PullMessage> pullMessage(Pull pull){
         messageQueueData.setOffSetMap(QueueOffsetStorage.getOffSetMap(data.getTopic(),data.getConsumerGroup()));
 ```
 ## 2.5 基础架构图
-# ![image.png](https://cdn.nlark.com/yuque/0/2022/png/250654/1642586595666-ec70f7a5-e006-4277-a37c-3e8af1f389c7.png#clientId=u25ac8e8c-a285-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=666&id=u926df0b3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1332&originWidth=1604&originalType=binary&ratio=1&rotation=0&showTitle=false&size=133047&status=done&style=stroke&taskId=uc2c4e3d2-9760-4286-a8f9-05a2179ae96&title=&width=802)
-# 
+# ![image.png](https://github.com/MortyCode/HsMq/blob/master/zimage/server.png?raw=true)
+
 # 3. 客户端
 ## 3.1 消息发送
 
@@ -372,7 +372,12 @@ Map<String, Map<String,AbstractConsumer>>
         }
     }
 ```
-## 3.3  目前还没有做消费的负载均衡
+
+## 3.3 消费者整体结构图
+# ![image.png](https://github.com/MortyCode/HsMq/blob/master/zimage/consumer.png?raw=true)
+
+
+## 3.4  目前还没有做消费的负载均衡
 ## ​
 
 
