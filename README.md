@@ -113,8 +113,9 @@ public HsResp<?> saveMessage(SendMessage sendMessage){
 
 ### 2.2.1 消息体存储
 #### 存储格式
-| ​
-| Length | Data | Length | Data | ...... |
+
+
+| - | Length | Data | Length | Data | ...... |
 | --- | --- | --- | --- | --- | --- |
 | 解释 | 下一条数据长度 | 消息内容 | 下一条数据长度 | 消息内容 | ...... |
 | 占用 | int(4个字节) | Length长度 | int(4个字节) | Length长度 | ...... |
@@ -166,8 +167,8 @@ public static synchronized MessageDurability save(String fileName,Object object)
 ```
 ### 2.2.2 消息消费队列存储
 #### 存储格式
-| ​
-| Offset | Length | TagHashcode | Index | ...... |
+
+| -| Offset | Length | TagHashcode | Index | ...... |
 | --- | --- | --- | --- | --- | --- |
 | 解释 | 偏移量 | 消息长度 | 消息tagHashCode | 这个队列里面的第几个消息 | ...... |
 | 占用 | long(8个字节) | int(4个字节) | int(4个字节) | long(8个字节) | ...... |
