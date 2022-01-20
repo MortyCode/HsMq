@@ -166,8 +166,8 @@ public static synchronized MessageDurability save(String fileName,Object object)
 ```
 ### 2.2.2 消息消费队列存储
 #### 存储格式
-
-| - | Offset | Length | TagHashcode | Index | ...... |
+| ​
+| Offset | Length | TagHashcode | Index | ...... |
 | --- | --- | --- | --- | --- | --- |
 | 解释 | 偏移量 | 消息长度 | 消息tagHashCode | 这个队列里面的第几个消息 | ...... |
 | 占用 | long(8个字节) | int(4个字节) | int(4个字节) | long(8个字节) | ...... |
@@ -242,6 +242,9 @@ public List<PullMessage> pullMessage(Pull pull){
         messageQueueData.setQueueSize(topicListener.getQueueSize());
         messageQueueData.setOffSetMap(QueueOffsetStorage.getOffSetMap(data.getTopic(),data.getConsumerGroup()));
 ```
+## 2.5 基础架构图
+# ![image.png](https://cdn.nlark.com/yuque/0/2022/png/250654/1642586595666-ec70f7a5-e006-4277-a37c-3e8af1f389c7.png#clientId=u25ac8e8c-a285-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=666&id=u926df0b3&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1332&originWidth=1604&originalType=binary&ratio=1&rotation=0&showTitle=false&size=133047&status=done&style=stroke&taskId=uc2c4e3d2-9760-4286-a8f9-05a2179ae96&title=&width=802)
+# 
 # 3. 客户端
 ## 3.1 消息发送
 
@@ -355,7 +358,7 @@ Map<String, Map<String,AbstractConsumer>>
 ```
 
 - 然后根据服务端的返回同步消费数据
-- 会根据返回的
+- 目前是为所有的队列都创建消息队列，然后把获取的queueId , offset 对应的信息初始化到 消费者里面，这样消费者就可以根据偏移量去服务端拉取数据
 ```java
     public void initQueue(MessageQueueData messageQueueData){
         Integer queueSize = messageQueueData.getQueueSize();
@@ -371,5 +374,7 @@ Map<String, Map<String,AbstractConsumer>>
 ```
 ## 3.3  目前还没有做消费的负载均衡
 ## ​
+
+
 
 
