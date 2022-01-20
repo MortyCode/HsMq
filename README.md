@@ -179,7 +179,7 @@ public static synchronized MessageDurability save(String fileName,Object object)
 ### 2.3.1 消息队列queue
 
 - 消息在存储到 **mq_n** 之后，会将消息分配到 消息队列之后，然后消费者在拉取消息的时候，会指定queueId来进行拉取数据。
-- 拉取消息的话，会首先读取queue的信息，读取出指定偏移量的n条数据的信息，然后去 **mq_n ** 去查询
+- 拉取消息的话，会首先读取queue的信息，读取出指定偏移量的n条数据的信息，然后去 **mq_n** 去查询
 ```java
 public List<PullMessage> pullMessage(Pull pull){
     //读取n条数据
